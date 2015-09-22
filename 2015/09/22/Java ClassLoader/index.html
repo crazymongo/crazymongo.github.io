@@ -5,16 +5,22 @@
   
   <title>ClassLoader机制 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。每一个类都包含一个定义该类的ClassLoader。ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoad">
+  <meta name="description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ClassLoader机制">
 <meta property="og:url" content="http://yoursite.com/2015/09/22/Java ClassLoader/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。每一个类都包含一个定义该类的ClassLoader。ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoad">
-<meta property="og:updated_time" content="2015-09-22T03:10:35.190Z">
+<meta property="og:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
+<meta property="og:updated_time" content="2015-09-22T03:14:39.275Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ClassLoader机制">
-<meta name="twitter:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。每一个类都包含一个定义该类的ClassLoader。ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoad">
+<meta name="twitter:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -63,7 +69,7 @@
         <section id="main"><article id="post-Java ClassLoader" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/09/22/Java ClassLoader/" class="article-date">
-  <time datetime="2015-09-22T03:10:35.190Z" itemprop="datePublished">2015-09-22</time>
+  <time datetime="2015-09-22T03:14:39.275Z" itemprop="datePublished">2015-09-22</time>
 </a>
     
   </div>
@@ -82,7 +88,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。<br>每一个类都包含一个定义该类的ClassLoader。<br>ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoader是一样的。如果元素类型是原始类型，那么此元素类型的数组没有ClassLoader。<br>如果应用程序想去扩展JVM动态加载类的功能，可以实现一个ClassLoader的子类。<br>ClassLoader经常被应用在安全管理方面，来标识安全域。<br>ClassLoader使用委托模型去查询类和资源，每一个ClassLoader实例都关联一个父ClassLoader。当一个ClassLoader实例被请求去查找一个类或资源时，该实例将首先委托父ClassLoader去查找，如果父ClassLoader无法查找成功，自己再尝试去查找。虚拟机内置的ClassLoader被称为“Bootstrap ClassLoader”，本身没有父ClassLoader，但可以作为其他ClassLoader实例的父亲。<br>ClassLoader支持并发加载类功能，该功能需要调用ClassLoader.registerAsParellelCapable方法。系统级别的ClassLoader默认已经调用该方法。子类需要手动调用此方法。<br>目前来看，由于ClassLoader需要并行能力，委托模型不是严格的分级关系，否则在加载类的过程中将会导致死锁，因为在类加载过程中，加载锁一直被持有。<br>通常情况下，JVM使用依赖平台的方式在本地文件系统中加载类。<br>然而，有些类无法从一个文件生成，它们可以从网络或者应用本身构造。defineClass方法把一个二进制字节数组转换成一个类实例。这种新定义的类的实例可以通过Class.newInstance方法生成。</p>
+        <p>ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。</p>
+<p>每一个类都包含一个定义该类的ClassLoader。</p>
+<p>ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoader是一样的。如果元素类型是原始类型，那么此元素类型的数组没有ClassLoader。</p>
+<p>如果应用程序想去扩展JVM动态加载类的功能，可以实现一个ClassLoader的子类。</p>
+<p>ClassLoader经常被应用在安全管理方面，来标识安全域。</p>
+<p>ClassLoader使用委托模型去查询类和资源，每一个ClassLoader实例都关联一个父ClassLoader。当一个ClassLoader实例被请求去查找一个类或资源时，该实例将首先委托父ClassLoader去查找，如果父ClassLoader无法查找成功，自己再尝试去查找。虚拟机内置的ClassLoader被称为“Bootstrap ClassLoader”，本身没有父ClassLoader，但可以作为其他ClassLoader实例的父亲。</p>
+<p>ClassLoader支持并发加载类功能，该功能需要调用ClassLoader.registerAsParellelCapable方法。系统级别的ClassLoader默认已经调用该方法。子类需要手动调用此方法。</p>
+<p>目前来看，由于ClassLoader需要并行能力，委托模型不是严格的分级关系，否则在加载类的过程中将会导致死锁，因为在类加载过程中，加载锁一直被持有。</p>
+<p>通常情况下，JVM使用依赖平台的方式在本地文件系统中加载类。</p>
+<p>然而，有些类无法从一个文件生成，它们可以从网络或者应用本身构造。defineClass方法把一个二进制字节数组转换成一个类实例。这种新定义的类的实例可以通过Class.newInstance方法生成。</p>
 <p>Java应用环境中不同的class分别由不同的ClassLoader负责加载。<br>一个JVM中默认的ClassLoader有Bootstrap ClassLoader、 Extension ClassLoader,、App ClassLoader, 分别各司其职：</p>
 <ul>
 <li><p>Bootstrap ClassLoader<br>  负责加载Java基础类，主要是jre/lib目录下的rt.jar、resource.jar、charsets.jar和class等。</p>
@@ -99,7 +114,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Java ClassLoader/" data-id="cieuscvfx0000xwpxqpngevl9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/22/Java ClassLoader/" data-id="cieush2jj0000lwpxwxb4y8vl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -108,19 +123,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/09/22/Java Immutable对象/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Java Immutable对象
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/09/22/Volley源码分析/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/09/22/Java Immutable对象/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Volley源码分析</div>
+      <div class="article-nav-title">Java Immutable对象</div>
     </a>
   
 </nav>
@@ -154,11 +160,11 @@
       <ul>
         
           <li>
-            <a href="/2015/09/22/Java Immutable对象/">Java Immutable对象</a>
+            <a href="/2015/09/22/Java ClassLoader/">ClassLoader机制</a>
           </li>
         
           <li>
-            <a href="/2015/09/22/Java ClassLoader/">ClassLoader机制</a>
+            <a href="/2015/09/22/Java Immutable对象/">Java Immutable对象</a>
           </li>
         
           <li>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ClassLoader机制 | crazymongo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClassLoader机制">
+<meta property="og:url" content="http://yoursite.com/2015/09/01/Java ClassLoader/index.html">
+<meta property="og:site_name" content="crazymongo">
+<meta property="og:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
+<meta property="og:updated_time" content="2015-09-22T03:30:29.255Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ClassLoader机制">
+<meta name="twitter:description" content="ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。
+每一个类都包含一个定义该类的ClassLoader。
+ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLo">
+  
+    <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">crazymongo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java ClassLoader" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/01/Java ClassLoader/" class="article-date">
+  <time datetime="2015-08-31T16:00:00.000Z" itemprop="datePublished">2015-09-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ClassLoader机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ClassLoader对象负责加载类，根据给定的类名，ClassLoader试图去定位这个类，或者生成该类定义的数据。通常的做法是把类名转换成文件名，然后从文件系统中读取该文件。</p>
+<p>每一个类都包含一个定义该类的ClassLoader。</p>
+<p>ClassLoader不能创建数组类对象，但是数组类对象可以按照Java运行时的请求自动创建。一个数组类对象的ClassLoader和此数组元素的类型的ClassLoader是一样的。如果元素类型是原始类型，那么此元素类型的数组没有ClassLoader。</p>
+<p>如果应用程序想去扩展JVM动态加载类的功能，可以实现一个ClassLoader的子类。</p>
+<p>ClassLoader经常被应用在安全管理方面，来标识安全域。</p>
+<p>ClassLoader使用委托模型去查询类和资源，每一个ClassLoader实例都关联一个父ClassLoader。当一个ClassLoader实例被请求去查找一个类或资源时，该实例将首先委托父ClassLoader去查找，如果父ClassLoader无法查找成功，自己再尝试去查找。虚拟机内置的ClassLoader被称为“Bootstrap ClassLoader”，本身没有父ClassLoader，但可以作为其他ClassLoader实例的父亲。</p>
+<p>ClassLoader支持并发加载类功能，该功能需要调用ClassLoader.registerAsParellelCapable方法。系统级别的ClassLoader默认已经调用该方法。子类需要手动调用此方法。</p>
+<p>目前来看，由于ClassLoader需要并行能力，委托模型不是严格的分级关系，否则在加载类的过程中将会导致死锁，因为在类加载过程中，加载锁一直被持有。</p>
+<p>通常情况下，JVM使用依赖平台的方式在本地文件系统中加载类。</p>
+<p>然而，有些类无法从一个文件生成，它们可以从网络或者应用本身构造。defineClass方法把一个二进制字节数组转换成一个类实例。这种新定义的类的实例可以通过Class.newInstance方法生成。</p>
+<p>Java应用环境中不同的class分别由不同的ClassLoader负责加载。<br>一个JVM中默认的ClassLoader有Bootstrap ClassLoader、 Extension ClassLoader,、App ClassLoader, 分别各司其职：</p>
+<ul>
+<li><p>Bootstrap ClassLoader<br>  负责加载Java基础类，主要是jre/lib目录下的rt.jar、resource.jar、charsets.jar和class等。</p>
+</li>
+<li><p>Extension ClassLoader<br>  负责加载Java扩展类，主要是jre/lib/ext目录下的jar和class。</p>
+</li>
+<li><p>App ClassLoader<br>  负责加载当前Java应用的classpath中的所有类。</p>
+</li>
+</ul>
+<p>其中Bootstrap ClassLoader是JVM级别的，由C++撰写；Extension ClassLoader、 App ClassLoader都是Java类，都继承自URLClassLoader。</p>
+<p>Bootstrap ClassLoader由JVM启动，然后初始化sum.misc.Launcher, sum.misc.Launcher初始化Extension ClassLoader、App ClassLoader。</p>
+<p>Bootstrap ClassLoader是Extension ClassLoader的parent，Extension ClassLoader是App ClassLoader的parent。但是这并不是继承关系，只是语义的定义，基本上，每一个ClassLoader实现，都有一个Parent ClassLoader。可以通过getParent方法得到当前ClassLoader的parent。Bootstrap ClassLoader比较特殊，因为它不是Java类，所以Extension ClassLoader的getParent方法返回NULL。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/01/Java ClassLoader/" data-id="cieut1kap0000w4pxaxwiuxx4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/classloader/">classloader</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/22/Java编程原则/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java编程原则
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/classloader/" style="font-size: 10px;">classloader</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/22/Java Immutable对象/">Java Immutable对象</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/Volley源码分析/">Volley源码分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/Java编程原则/">Java编程原则</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/01/Java ClassLoader/">ClassLoader机制</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 crazymongo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

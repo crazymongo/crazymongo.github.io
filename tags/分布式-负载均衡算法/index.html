@@ -3,42 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Volley源码分析 | crazymongo</title>
+  <title>Tag: 分布式 负载均衡算法 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="通过阅读源码，Volley的主要部件如下所示：
-
-Request 用来封装每一次的请求行为
-
-Response 用来封装每一次的请求结果
-
-RequestQueue 暂存客户端请求的一个有序队列
-
-NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本身是一个独立的线程，Volley默认建立包括4个NetworkDispatcher 的线程">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Volley源码分析">
-<meta property="og:url" content="http://yoursite.com/2015/09/22/Volley源码分析/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="crazymongo">
+<meta property="og:url" content="http://yoursite.com/tags/分布式-负载均衡算法/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description" content="通过阅读源码，Volley的主要部件如下所示：
-
-Request 用来封装每一次的请求行为
-
-Response 用来封装每一次的请求结果
-
-RequestQueue 暂存客户端请求的一个有序队列
-
-NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本身是一个独立的线程，Volley默认建立包括4个NetworkDispatcher 的线程">
-<meta property="og:updated_time" content="2015-09-21T10:39:55.030Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Volley源码分析">
-<meta name="twitter:description" content="通过阅读源码，Volley的主要部件如下所示：
-
-Request 用来封装每一次的请求行为
-
-Response 用来封装每一次的请求结果
-
-RequestQueue 暂存客户端请求的一个有序队列
-
-NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本身是一个独立的线程，Volley默认建立包括4个NetworkDispatcher 的线程">
+<meta name="twitter:title" content="crazymongo">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -84,85 +59,39 @@ NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本�
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Volley源码分析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/22/Volley源码分析/" class="article-date">
-  <time datetime="2015-09-22T03:04:29.665Z" itemprop="datePublished">2015-09-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Volley源码分析
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2015/09/22/负载均衡算法/" class="archive-article-date">
+  <time datetime="2015-09-22T06:15:38.000Z" itemprop="datePublished">Sep 22</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2015/09/22/负载均衡算法/">负载均衡算法</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通过阅读源码，Volley的主要部件如下所示：</p>
-<ul>
-<li><p>Request 用来封装每一次的请求行为</p>
-</li>
-<li><p>Response 用来封装每一次的请求结果</p>
-</li>
-<li><p>RequestQueue 暂存客户端请求的一个有序队列</p>
-</li>
-<li><p>NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本身是一个独立的线程，Volley默认建立包括4个NetworkDispatcher 的线程池，用来处理请求。</p>
-</li>
-<li><p>Network 用来执行具体的请求操作，并处理请求结果，并将结果封装成NetworkResponse，默认使用BasicNetwork实现。</p>
-</li>
-<li><p>ResponseDelivery 用来将Network返回的NetworkResponse对象，返回给客户端。</p>
-</li>
-</ul>
-<p>下面是我总结的Volley执行流程：</p>
-<p>NetworkDispatcher 从RequestQueue取得请求，然后调用Network.performRequest方法，服务端返回后Network将返回封装成NetworkResponse，然后调用ResponseDelivery.postResponse方法将响应传递给主线程，其内部是通过一个执行器Executor进行处理，使用一个handler与主线程通信。</p>
-<p>可借鉴的编程方法：</p>
-<ul>
-<li><p>面向接口编程 </p>
-</li>
-<li><p>聚合原则</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Volley源码分析/" data-id="ciev0ckdn000630pxgzj2f1lf" class="article-share-link">Share</a>
-      
-      
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2015/09/22/Java Immutable对象/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Java Immutable对象
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/09/22/Java编程原则/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Java编程原则</div>
-    </a>
-  
-</nav>
-
-  
 </article>
-
+  
+  
+    </div></section>
+  
 </section>
         
           <aside id="sidebar">

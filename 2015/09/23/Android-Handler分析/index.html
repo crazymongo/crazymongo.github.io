@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android-Handler分析 | crazymongo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一个Handler只能关联一个线程，只能处理该线程的消息队列。当我们创建一个Handle对象时，该对象就绑定到了创建它的线程，从被创建的那一刻开始，该handler对象就开始处理消息和runnables的传递和执行。
+handler主要有两个作用：
+
+计划、安排消息和runnables的执行时间
+在另外一个线程中，把要执行的操作压入到消息队列中，等待在所属线程中执行
+
+无论是普通的消息还是runn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-Handler分析">
+<meta property="og:url" content="http://yoursite.com/2015/09/23/Android-Handler分析/index.html">
+<meta property="og:site_name" content="crazymongo">
+<meta property="og:description" content="一个Handler只能关联一个线程，只能处理该线程的消息队列。当我们创建一个Handle对象时，该对象就绑定到了创建它的线程，从被创建的那一刻开始，该handler对象就开始处理消息和runnables的传递和执行。
+handler主要有两个作用：
+
+计划、安排消息和runnables的执行时间
+在另外一个线程中，把要执行的操作压入到消息队列中，等待在所属线程中执行
+
+无论是普通的消息还是runn">
+<meta property="og:updated_time" content="2015-09-23T06:37:23.712Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-Handler分析">
+<meta name="twitter:description" content="一个Handler只能关联一个线程，只能处理该线程的消息队列。当我们创建一个Handle对象时，该对象就绑定到了创建它的线程，从被创建的那一刻开始，该handler对象就开始处理消息和runnables的传递和执行。
+handler主要有两个作用：
+
+计划、安排消息和runnables的执行时间
+在另外一个线程中，把要执行的操作压入到消息队列中，等待在所属线程中执行
+
+无论是普通的消息还是runn">
+  
+    <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">crazymongo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-Handler分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/23/Android-Handler分析/" class="article-date">
+  <time datetime="2015-09-23T02:57:41.000Z" itemprop="datePublished">2015-09-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android-Handler分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个Handler只能关联一个线程，只能处理该线程的消息队列。当我们创建一个Handle对象时，该对象就绑定到了创建它的线程，从被创建的那一刻开始，该handler对象就开始处理消息和runnables的传递和执行。</p>
+<p>handler主要有两个作用：</p>
+<ol>
+<li>计划、安排消息和runnables的执行时间</li>
+<li>在另外一个线程中，把要执行的操作压入到消息队列中，等待在所属线程中执行</li>
+</ol>
+<p>无论是普通的消息还是runnable对象，都会被封装到一个Message对象中，然后放入MessageQueue等待执行。其中runnable对象将在handler所属线程中执行。</p>
+<p>handler中，无论是发送普通消息的以send开头的方法，还是发送runnable对象的以post开头的方法，最终都会通过调用sendMessageAtTime或sendMessageAtFrontOfQueue方法，然后通过此方法调用enqueueMessage方法，将消息放入队列等待执行。</p>
+<p>既然我们通过handler可以发送消息，并放入消息队列中等待执行，那我们如何处理这些消息呢？我们可以通过handler提供了两种方法来处理这些消息：</p>
+<ol>
+<li>实现一个Handler的子类，然后重写handleMessage方法。</li>
+<li>实现handler的Callback接口，实现handleMessage方法。</li>
+</ol>
+<p><strong>注意：</strong>runnable形式的消息是不会传递到上面的handleMessage方法中。</p>
+<p>我们可以通过handler的dispatchMessage方法查看其处理流程：</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>{
+    <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) {
+        handleCallback(msg);
+    } <span class="keyword">else</span> {
+        <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (mCallback.handleMessage(msg)) {
+                <span class="keyword">return</span>;
+            }
+        }
+        handleMessage(msg);
+    }
+}
+</code></pre><p>下面让我们来看一下runWithScissors方法：</p>
+<p>该方法用来同步的运行某个任务，如果当前线程就是handler的所属线程，那么该任务就会立即执行，而无需再进入消息队列。否则，该任务就会被放到消息队列中等待执行，而runWithScissors就会处于等待状态，直到任务执行完成或超时。<br>该方法所用的同步方法是通过定义一个BlockingRunnable类实现的。定义如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">final</span> Runnable mTask;
+    <span class="keyword">private</span> <span class="keyword">boolean</span> mDone;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">BlockingRunnable</span><span class="params">(Runnable task)</span> </span>{
+        mTask = task;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+        <span class="keyword">try</span> {
+            mTask.run();
+        } <span class="keyword">finally</span> {
+            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+                mDone = <span class="keyword">true</span>;
+                notifyAll();
+            }
+        }
+    }
+
+    <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">postAndWait</span><span class="params">(Handler <span class="keyword">handler</span>, <span class="keyword">long</span> timeout)</span> </span>{
+        <span class="keyword">if</span> (!<span class="keyword">handler</span>.post(<span class="keyword">this</span>)) {
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        }
+
+        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+            <span class="keyword">if</span> (timeout &gt; <span class="number">0</span>) {
+                <span class="keyword">final</span> <span class="keyword">long</span> expirationTime = SystemClock.uptimeMillis() + timeout;
+                <span class="keyword">while</span> (!mDone) {
+                    <span class="keyword">long</span> delay = expirationTime - SystemClock.uptimeMillis();
+                    <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>) {
+                        <span class="keyword">return</span> <span class="keyword">false</span>; <span class="comment">// timeout</span>
+                    }
+                    <span class="keyword">try</span> {
+                        wait(delay);
+                    } <span class="keyword">catch</span> (InterruptedException ex) {
+                    }
+                }
+            } <span class="keyword">else</span> {
+                <span class="keyword">while</span> (!mDone) {
+                    <span class="keyword">try</span> {
+                        wait();
+                    } <span class="keyword">catch</span> (InterruptedException ex) {
+                    }
+                }
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/23/Android-Handler分析/" data-id="ciewi1jsh0000awpxm2s40x03" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Handler/">Android Handler</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/23/Android-Looper/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android-Looper
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/09/22/Android-Message分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android-Message分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android, Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android, Message</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/23/Android-Looper/">Android-Looper</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/23/Android-Handler分析/">Android-Handler分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/Android-Message分析/">Android-Message分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/负载均衡算法/">负载均衡算法</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/Java Immutable对象/">Java Immutable对象</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 crazymongo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

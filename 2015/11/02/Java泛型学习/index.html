@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java泛型学习 | crazymongo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="java 泛型中? super T和? extends T的区别:
+经常发现有List&amp;lt;? super T&amp;gt;、Set&amp;lt;? extends T&amp;gt;的声明，是什么意思？&amp;lt;? super T&amp;gt;表示包括T在内的任何T的父类，&amp;lt;? extends T&amp;gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。
+extends
+List&amp;lt;?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java泛型学习">
+<meta property="og:url" content="http://yoursite.com/2015/11/02/Java泛型学习/index.html">
+<meta property="og:site_name" content="crazymongo">
+<meta property="og:description" content="java 泛型中? super T和? extends T的区别:
+经常发现有List&amp;lt;? super T&amp;gt;、Set&amp;lt;? extends T&amp;gt;的声明，是什么意思？&amp;lt;? super T&amp;gt;表示包括T在内的任何T的父类，&amp;lt;? extends T&amp;gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。
+extends
+List&amp;lt;?">
+<meta property="og:updated_time" content="2015-11-02T13:21:43.765Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java泛型学习">
+<meta name="twitter:description" content="java 泛型中? super T和? extends T的区别:
+经常发现有List&amp;lt;? super T&amp;gt;、Set&amp;lt;? extends T&amp;gt;的声明，是什么意思？&amp;lt;? super T&amp;gt;表示包括T在内的任何T的父类，&amp;lt;? extends T&amp;gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。
+extends
+List&amp;lt;?">
+  
+    <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">crazymongo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/02/Java泛型学习/" class="article-date">
+  <time datetime="2015-11-02T02:34:13.000Z" itemprop="datePublished">2015-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java泛型学习
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>java 泛型中? super T和? extends T的区别:</p>
+<p>经常发现有List&lt;? super T&gt;、Set&lt;? extends T&gt;的声明，是什么意思？&lt;? super T&gt;表示包括T在内的任何T的父类，&lt;? extends T&gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。</p>
+<p><strong>extends</strong></p>
+<p>List&lt;? extends Number&gt; foo3的通配符声明，意味着以下的赋值是合法的：</p>
+<pre><code><span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Number&gt;();
+<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Integer&gt;();
+<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Double&gt;();
+</code></pre><ul>
+<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你可以读取到Number，因为以上的列表要么包含Number元素，要么包含Number的子元素。你不能保证读取到Integer，因为foo3可能指向的是List<double>。你不能保证读取到Double，因为foo3可能指向的是List<integer>.</integer></double></li>
+<li>写入操作 通过以上的赋值语句，你能把一个什么类型的元素合法地插入到foo3中呢？你不能插入一个Integer元素，因为foo3可能指向List<double>。你不能插入一个Double元素，因为foo3可能指向List<integer>。你不能插入一个Number元素，因为foo3可能指向List<integer>。你不能忘List&lt;? extends T&gt;中插入任何类型的对象，因为你不能保证列表实际指向的类型是什么，你并不能保证列表中实际存储什么类型的对象。唯一可以保证的是，你可以从中读取到T或者T的子类。</integer></integer></double></li>
+</ul>
+<p><strong>super</strong></p>
+<p>List&lt;? super Integer&gt; foo3的通配符声明，意味着以下赋值是合法的：</p>
+<pre><code><span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;<span class="built_in">Integer</span>&gt;();
+<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Number&gt;();
+<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Object&gt;();
+</code></pre><ul>
+<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你不能保证读取到Integer，因为foo3可能指向List<number>或者List<object>。你不能保证读取到Number，因为foo3可能指向List<object>。唯一可以保证的是，你可以读取到Object或者Object子类的对象。</object></object></number></li>
+<li>写入操作 通过以上给定的赋值语句，你能把什么类型的元素合法地插入到foo3中呢？你可以插入Integer对象，因为上述声明的列表都支持Integer。你可以插入Integer的子类的对象，因为Integer的子类同时也是Integer，原因同上。你不能插入Double对象，因为foo3可能指向ArrayList<integer>。你不能插入Number对象或者Object对象，因为foo3可能指向ArrayList<integer>。</integer></integer></li>
+</ul>
+<p><strong>PECS</strong></p>
+<p>请记住PECS原则：生产者（Producer）使用extends，消费者（Consumer）使用super。</p>
+<p>如果你需要一个列表提供T类型的元素（即你想从列表中读取T类型的元素），你需要把这个列表声明成&lt;? extends T&gt;，因此你不能往该列表中添加任何元素。</p>
+<p>如果需要一个列表存储T类型的元素（即你想把T类型的元素加入到列表中），你需要把这个列表声明成&lt;? super T&gt;，因此你不能保证从中读取到的元素的类型。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cigrsen9n000i9opxixw6df0t" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/10/29/编程技巧-对象池/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">编程技巧-对象池</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ptrace/">ptrace</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/ptrace/" style="font-size: 10px;">ptrace</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/29/编程技巧-对象池/">编程技巧-对象池</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/29/EventBus学习笔记/">EventBus学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/20/Java-Future/">Java-Future</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/20/Java-Callable/">Java-Callable</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 crazymongo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

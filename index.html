@@ -61,6 +61,315 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android百分比布局学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/13/Android百分比布局学习/" class="article-date">
+  <time datetime="2015-12-13T11:08:49.000Z" itemprop="datePublished">2015-12-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android应用的适配问题，让很多人头痛过，我也不例外。前段时间看到Google提供了一个支持库，该支持库可以用来进行百分比的布局，对此支持库特别感兴趣，于是抱着学习的态度开始阅读其源码。</p>
+<p>该支持库中只有三个类，包括：PercentFrameLayout，PercentRelativeLayout，PercentLayoutHelper。</p>
+<p>查看源码之后，发现PercentRelativeLayout和PercentFrameLayout的实现方法几乎一模一样，都同属于一个模板。</p>
+<p>下面是PercentFrameLayout的源码：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PercentFrameLayout</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">final</span> PercentLayoutHelper mHelper = <span class="keyword">new</span> PercentLayoutHelper(<span class="keyword">this</span>);
+
+    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context)</span> </span>{
+        <span class="keyword">super</span>(context);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs)</span> </span>{
+        <span class="keyword">super</span>(context, attrs);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>{
+        <span class="keyword">super</span>(context, attrs, defStyleAttr);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> LayoutParams <span class="title">generateDefaultLayoutParams</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> LayoutParams <span class="title">generateLayoutParams</span><span class="params">(AttributeSet attrs)</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(getContext(), attrs);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>{
+        mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);
+        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        <span class="keyword">if</span> (mHelper.handleMeasuredStateTooSmall()) {
+            <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>{
+        <span class="keyword">super</span>.onLayout(changed, left, top, right, bottom);
+        mHelper.restoreOriginalParams();
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LayoutParams</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span>.<span class="title">LayoutParams</span>
+            <span class="keyword">implements</span> <span class="title">PercentLayoutHelper</span>.<span class="title">PercentLayoutParams</span> </span>{
+        <span class="keyword">private</span> PercentLayoutHelper.PercentLayoutInfo mPercentLayoutInfo;
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(Context c, AttributeSet attrs)</span> </span>{
+            <span class="keyword">super</span>(c, attrs);
+            mPercentLayoutInfo = PercentLayoutHelper.getPercentLayoutInfo(c, attrs);
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>{
+            <span class="keyword">super</span>(width, height);
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height, <span class="keyword">int</span> gravity)</span> </span>{
+            <span class="keyword">super</span>(width, height, gravity);
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(ViewGroup.LayoutParams source)</span> </span>{
+            <span class="keyword">super</span>(source);
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(MarginLayoutParams source)</span> </span>{
+            <span class="keyword">super</span>(source);
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(FrameLayout.LayoutParams source)</span> </span>{
+            <span class="keyword">super</span>((MarginLayoutParams) source);
+            gravity = source.gravity;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(LayoutParams source)</span> </span>{
+            <span class="keyword">this</span>((FrameLayout.LayoutParams) source);
+            mPercentLayoutInfo = source.mPercentLayoutInfo;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> PercentLayoutHelper.<span class="function">PercentLayoutInfo <span class="title">getPercentLayoutInfo</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (mPercentLayoutInfo == <span class="keyword">null</span>) {
+                mPercentLayoutInfo = <span class="keyword">new</span> PercentLayoutHelper.PercentLayoutInfo();
+            }
+
+            <span class="keyword">return</span> mPercentLayoutInfo;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setBaseAttributes</span><span class="params">(TypedArray a, <span class="keyword">int</span> widthAttr, <span class="keyword">int</span> heightAttr)</span> </span>{
+            PercentLayoutHelper.fetchWidthAndHeight(<span class="keyword">this</span>, a, widthAttr, heightAttr);
+        }
+    }
+}
+</code></pre><p>很明显，PercentFrameLayout是FrameLayout的一个子类，接下来，我将对每个函数逐个进行分析。</p>
+<p><strong>首先是generateDefaultLayoutParams()函数</strong></p>
+<p>通过该函数的名字，我们大概就能知道该函数的作用了，主要就是用来生成一个默认的布局参数。其主要是在addView(View child)之类的函数中使用，如果child本身没有设置布局参数，就通过该函数生成一个，作为该child的布局参数。</p>
+<p><strong>generateLayoutParams(AttributeSet attrs)</strong></p>
+<p>这个函数也是用来生成一个布局参数，不过该布局参数是根据AttributeSet（xml布局文件中设置的属性）生成的。该函数主要在填充布局的时候被调用，即当LayoutInflater.inflater()方法调用时。有一点我们要知道，此函数也是用来为子视图生成布局参数的，也就是说子视图的布局参数由父容器生成。</p>
+<p><strong>onMeasure(int widthMeasureSpec, int heightMeasureSpec)</strong></p>
+<p>此函数主要用来测量每个视图的大小，因此，实现百分比布局时，自然而然的就要从这个函数入手。接下来就是实现百分比布局的关键点了，通过调用<br>PercentLayoutHelper.adjustChildren方法重新计算每个视图的大小，</p>
+<p><strong>onLayout(boolean changed, int left, int top, int right, int bottom)</strong></p>
+<p>在此函数中，每个子视图的layout方法将被调用。</p>
+<p>下面我将对实现百分比布局的关键类PercentLayoutHelper进行分析：</p>
+<p>首先先分析PercentLayoutInfo类，下面是其源码：</p>
+<pre><code> <span class="comment">/**
+ * Container for information about percentage dimensions and margins. It acts as an extension
+ * for {@code LayoutParams}.
+ */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PercentLayoutInfo</span> {
+    <span class="keyword">public</span> <span class="keyword">float</span> widthPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> heightPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> leftMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> topMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> rightMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> bottomMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> startMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> endMarginPercent;
+
+    <span class="keyword">public</span> <span class="keyword">float</span> aspectRatio;
+
+    <span class="comment">/* package */</span> final ViewGroup.MarginLayoutParams mPreservedParams;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">PercentLayoutInfo</span>(<span class="params"></span>) </span>{
+        widthPercent = -<span class="number">1</span>f;
+        heightPercent = -<span class="number">1</span>f;
+        leftMarginPercent = -<span class="number">1</span>f;
+        topMarginPercent = -<span class="number">1</span>f;
+        rightMarginPercent = -<span class="number">1</span>f;
+        bottomMarginPercent = -<span class="number">1</span>f;
+        startMarginPercent = -<span class="number">1</span>f;
+        endMarginPercent = -<span class="number">1</span>f;
+        mPreservedParams = <span class="keyword">new</span> ViewGroup.MarginLayoutParams(<span class="number">0</span>, <span class="number">0</span>);
+    }
+
+    <span class="comment">/**
+     * Fills {@code ViewGroup.LayoutParams} dimensions based on percentage values.
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillLayoutParams</span>(<span class="params">ViewGroup.LayoutParams <span class="keyword">params</span>, <span class="keyword">int</span> widthHint,
+            <span class="keyword">int</span> heightHint</span>) </span>{
+        <span class="comment">// Preserve the original layout params, so we can restore them after the measure step.</span>
+        mPreservedParams.width = <span class="keyword">params</span>.width;
+        mPreservedParams.height = <span class="keyword">params</span>.height;
+
+        <span class="comment">// We assume that width/height set to 0 means that value was unset. This might not</span>
+        <span class="comment">// necessarily be true, as the user might explicitly set it to 0. However, we use this</span>
+        <span class="comment">// information only for the aspect ratio. If the user set the aspect ratio attribute,</span>
+        <span class="comment">// it means they accept or soon discover that it will be disregarded.</span>
+        final boolean widthNotSet = <span class="keyword">params</span>.width == <span class="number">0</span> &amp;&amp; widthPercent &lt; <span class="number">0</span>;
+        final boolean heightNotSet = <span class="keyword">params</span>.height == <span class="number">0</span> &amp;&amp; heightPercent &lt; <span class="number">0</span>;
+
+        <span class="keyword">if</span> (widthPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.width = (<span class="keyword">int</span>) (widthHint * widthPercent);
+        }
+
+        <span class="keyword">if</span> (heightPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.height = (<span class="keyword">int</span>) (heightHint * heightPercent);
+        }
+
+        <span class="keyword">if</span> (aspectRatio &gt;= <span class="number">0</span>) {
+            <span class="keyword">if</span> (widthNotSet) {
+                <span class="keyword">params</span>.width = (<span class="keyword">int</span>) (<span class="keyword">params</span>.height * aspectRatio);
+            }
+            <span class="keyword">if</span> (heightNotSet) {
+                <span class="keyword">params</span>.height = (<span class="keyword">int</span>) (<span class="keyword">params</span>.width / aspectRatio);
+            }
+        }
+
+        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, <span class="string">"after fillLayoutParams: ("</span> + <span class="keyword">params</span>.width + <span class="string">", "</span> + <span class="keyword">params</span>.height + <span class="string">")"</span>);
+        }
+    }
+
+    <span class="comment">/**
+     * Fills {@code ViewGroup.MarginLayoutParams} dimensions and margins based on percentage
+     * values.
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillMarginLayoutParams</span>(<span class="params">ViewGroup.MarginLayoutParams <span class="keyword">params</span>, <span class="keyword">int</span> widthHint,
+            <span class="keyword">int</span> heightHint</span>) </span>{
+        fillLayoutParams(<span class="keyword">params</span>, widthHint, heightHint);
+
+        <span class="comment">// Preserver the original margins, so we can restore them after the measure step.</span>
+        mPreservedParams.leftMargin = <span class="keyword">params</span>.leftMargin;
+        mPreservedParams.topMargin = <span class="keyword">params</span>.topMargin;
+        mPreservedParams.rightMargin = <span class="keyword">params</span>.rightMargin;
+        mPreservedParams.bottomMargin = <span class="keyword">params</span>.bottomMargin;
+        MarginLayoutParamsCompat.setMarginStart(mPreservedParams,
+                MarginLayoutParamsCompat.getMarginStart(<span class="keyword">params</span>));
+        MarginLayoutParamsCompat.setMarginEnd(mPreservedParams,
+                MarginLayoutParamsCompat.getMarginEnd(<span class="keyword">params</span>));
+
+        <span class="keyword">if</span> (leftMarginPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.leftMargin = (<span class="keyword">int</span>) (widthHint * leftMarginPercent);
+        }
+        <span class="keyword">if</span> (topMarginPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.topMargin = (<span class="keyword">int</span>) (heightHint * topMarginPercent);
+        }
+        <span class="keyword">if</span> (rightMarginPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.rightMargin = (<span class="keyword">int</span>) (widthHint * rightMarginPercent);
+        }
+        <span class="keyword">if</span> (bottomMarginPercent &gt;= <span class="number">0</span>) {
+            <span class="keyword">params</span>.bottomMargin = (<span class="keyword">int</span>) (heightHint * bottomMarginPercent);
+        }
+        <span class="keyword">if</span> (startMarginPercent &gt;= <span class="number">0</span>) {
+            MarginLayoutParamsCompat.setMarginStart(<span class="keyword">params</span>,
+                    (<span class="keyword">int</span>) (widthHint * startMarginPercent));
+        }
+        <span class="keyword">if</span> (endMarginPercent &gt;= <span class="number">0</span>) {
+            MarginLayoutParamsCompat.setMarginEnd(<span class="keyword">params</span>,
+                    (<span class="keyword">int</span>) (widthHint * endMarginPercent));
+        }
+        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, <span class="string">"after fillMarginLayoutParams: ("</span> + <span class="keyword">params</span>.width + <span class="string">", "</span> + <span class="keyword">params</span>.height
+                    + <span class="string">")"</span>);
+        }
+    }
+
+    @<span class="function">Override
+    <span class="keyword">public</span> String <span class="title">toString</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> String.format(<span class="string">"PercentLayoutInformation width: %f height %f, margins (%f, %f, "</span>
+                        + <span class="string">" %f, %f, %f, %f)"</span>, widthPercent, heightPercent, leftMarginPercent,
+                topMarginPercent, rightMarginPercent, bottomMarginPercent, startMarginPercent,
+                endMarginPercent);
+
+    }
+
+    <span class="comment">/**
+     * Restores original dimensions and margins after they were changed for percentage based
+     * values. Calling this method only makes sense if you previously called
+     * {@link PercentLayoutHelper.PercentLayoutInfo#fillMarginLayoutParams}.
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreMarginLayoutParams</span>(<span class="params">ViewGroup.MarginLayoutParams <span class="keyword">params</span></span>) </span>{
+        restoreLayoutParams(<span class="keyword">params</span>);
+        <span class="keyword">params</span>.leftMargin = mPreservedParams.leftMargin;
+        <span class="keyword">params</span>.topMargin = mPreservedParams.topMargin;
+        <span class="keyword">params</span>.rightMargin = mPreservedParams.rightMargin;
+        <span class="keyword">params</span>.bottomMargin = mPreservedParams.bottomMargin;
+        MarginLayoutParamsCompat.setMarginStart(<span class="keyword">params</span>,
+                MarginLayoutParamsCompat.getMarginStart(mPreservedParams));
+        MarginLayoutParamsCompat.setMarginEnd(<span class="keyword">params</span>,
+                MarginLayoutParamsCompat.getMarginEnd(mPreservedParams));
+    }
+
+    <span class="comment">/**
+     * Restores original dimensions after they were changed for percentage based values. Calling
+     * this method only makes sense if you previously called
+     * {@link PercentLayoutHelper.PercentLayoutInfo#fillLayoutParams}.
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreLayoutParams</span>(<span class="params">ViewGroup.LayoutParams <span class="keyword">params</span></span>) </span>{
+        <span class="keyword">params</span>.width = mPreservedParams.width;
+        <span class="keyword">params</span>.height = mPreservedParams.height;
+    }
+}
+</code></pre><p>正如其所注释的那样，该类充当LayoutParams的扩展，包含尺寸和边距的百分比信息。其fillLayoutParams和fillMarginLayoutParams方法用来计算视图的宽和高，以及边距的具体大小。</p>
+<p>静态方法PercentLayoutHelper.getPercentLayoutInfo(Context context, AttributeSet attrs)用来得到一个PercentLayoutInfo对象。</p>
+<p>PercentLayoutHelper.adjustChildren(int widthMeasureSpec, int heightMeasureSpec)方法主要用来根据百分比属性计算具体的宽、高等参数。</p>
+<p>PercentLayoutHelper.handleMeasuredStateTooSmall方法，主要处理子视图的大小是否需要重新调整。当子视图的具体宽高不足以包裹其内容大小，且子视图的宽高属性至少一个设置成WRAP_CONTENT，那么就会重新计算改视图的大小。</p>
+<p>PercentLayoutHelper.restoreOriginalParams()方法用来恢复子视图原始布局参数，以供下次使用。</p>
+<p>PercentLayoutHelper.fetchWidthAndHeight方法，在百分比布局类的布局参数的setBaseAttributes(TypedArray a, int widthAttr, int heightAttr)方法中被调用，其作用就是给布局参数的宽高属性赋值，从而避免抛出RuntimeException。因为在ViewGroup.LayoutParams类中setBaseAttributes(TypedArray a, int widthAttr, int heightAttr)的默认实现方法如下所示：</p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">void</span> setBaseAttributes(TypedArray a, <span class="built_in">int</span> widthAttr, <span class="built_in">int</span> heightAttr) {
+       <span class="variable">width</span> = a.getLayoutDimension(widthAttr, <span class="string">"layout_width"</span>);
+       <span class="variable">height</span> = a.getLayoutDimension(heightAttr, <span class="string">"layout_height"</span>);
+}
+</code></pre><p>其中TypedArray.getLayoutDimension(int index, String name)方法在找不到名为name的相关属性时，会抛出RuntimeException异常。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="cii4fjktm001qiwpxhl6ermam" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android屏幕方向切换问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/09/Android屏幕方向切换问题/" class="article-date">
@@ -129,7 +438,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="cii479x7d001qp8pxesolqfz8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="cii4fjkto001tiwpxv2wp3ope" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a></li></ul>
@@ -168,7 +477,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cii479x4g0003p8pxkntr4ao9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cii4fjkrp0003iwpxfutlhdvc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
@@ -250,7 +559,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="cii479x5f000gp8px6iwwc5v7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="cii4fjks6000giwpx4xlw2hqf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Servlet/">Servlet</a></li></ul>
@@ -298,7 +607,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="cii479x7a001np8pxefqgbvpo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="cii4fjktk001niwpx7vjqvgxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CGI/">CGI</a></li></ul>
@@ -360,7 +669,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cii479x5o000lp8pxgqe7kdjj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cii4fjkse000liwpx3a2tlys2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
@@ -489,7 +798,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cii479x570009p8pxpld12ciy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cii4fjks00009iwpx7tj7nc4f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a></li></ul>
@@ -564,7 +873,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cii479x75001kp8px00jcimei" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cii4fjkti001kiwpxgoztagie" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-EventBus/">android EventBus</a></li></ul>
@@ -614,7 +923,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cii479x69000pp8pxqo4l6ux1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cii4fjksx000piwpxbjmz6ee6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Future/">Java Future</a></li></ul>
@@ -654,51 +963,10 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cii479x6v001ap8px1ysq50ue" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cii4fjktb001aiwpx6y8kfv46" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Callable/">Java Callable</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-ExecutorService" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/20/Java-ExecutorService/" class="article-date">
-  <time datetime="2015-10-20T06:56:23.000Z" itemprop="datePublished">2015-10-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/20/Java-ExecutorService/">Java-ExecutorService</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ExecutorService提供管理终止的方法，以及可以跟踪一个或多个异步任务执行状况，并生产Future对象的方法。</p>
-<p>ExecutorService可以被关闭，这将导致其拒绝新任务。其提供了两种不同的方法来关闭自身。shutdown()方法在终止前允许执行以前提交的任务，而shutdownNow()方法阻止等待任务启动并试图停止当前正在执行的任务。在终止时，执行程序没有任务在执行，也没有任务在等待执行，并且无法提交新任务。应当关闭未使用的ExecutorService以允许回收其资源。</p>
-<p>通过创建并返回一个可用于取消执行和/或等待完成的Future对象，submit方法扩展了基本方法execute。方法invokeAny和invokeAll是批量执行的最常用形式，它们执行任务collection，然后等待至少一个，或全部任务完成（可使用ExecutorCompletionService类来编写这些方法的自定义变体）。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="cii479x6h000vp8pxjzd9qrcr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a></li></ul>
 
     </footer>
   </div>
@@ -722,7 +990,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -731,7 +999,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -740,7 +1008,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -750,6 +1018,10 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
+          </li>
         
           <li>
             <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
@@ -765,10 +1037,6 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
         
           <li>
             <a href="/2015/11/20/CGI/">CGI</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
           </li>
         
       </ul>

@@ -3,17 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Java ByteArrayOutputStream | crazymongo</title>
+  <title>Class.forName作用 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="crazymongo">
-<meta property="og:url" content="http://yoursite.com/tags/Java-ByteArrayOutputStream/index.html">
+  <meta name="description" content="Class.forName(“classname”)返回的是一个类Class。首先我们要明白在Java里面任何class都要装载在虚拟机上才可运行。这个方法就是用来装载类的（和new不一样，要分清楚）。
+如何创建一个类实例？很多人首先想到的就是new这个关键字，没错，使用new关键字确实可以创建我们想要的类实例。不过还有一种方法，如下所示：
+//创建一个Person类的实例
+Class mClas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Class.forName作用">
+<meta property="og:url" content="http://yoursite.com/2015/12/15/Class-forName作用/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description">
+<meta property="og:description" content="Class.forName(“classname”)返回的是一个类Class。首先我们要明白在Java里面任何class都要装载在虚拟机上才可运行。这个方法就是用来装载类的（和new不一样，要分清楚）。
+如何创建一个类实例？很多人首先想到的就是new这个关键字，没错，使用new关键字确实可以创建我们想要的类实例。不过还有一种方法，如下所示：
+//创建一个Person类的实例
+Class mClas">
+<meta property="og:updated_time" content="2015-12-15T08:05:44.384Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="crazymongo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Class.forName作用">
+<meta name="twitter:description" content="Class.forName(“classname”)返回的是一个类Class。首先我们要明白在Java里面任何class都要装载在虚拟机上才可运行。这个方法就是用来装载类的（和new不一样，要分清楚）。
+如何创建一个类实例？很多人首先想到的就是new这个关键字，没错，使用new关键字确实可以创建我们想要的类实例。不过还有一种方法，如下所示：
+//创建一个Person类的实例
+Class mClas">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -59,39 +69,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/15/Java-ByteArrayOutputStream/" class="archive-article-date">
-  <time datetime="2015-10-15T02:45:45.000Z" itemprop="datePublished">Oct 15</time>
+        <section id="main"><article id="post-Class-forName作用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/15/Class-forName作用/" class="article-date">
+  <time datetime="2015-12-15T08:05:44.000Z" itemprop="datePublished">2015-12-15</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/15/Java-ByteArrayOutputStream/">Java-ByteArrayOutputStream</a>
+    <h1 class="article-title" itemprop="name">
+      Class.forName作用
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Class.forName(“classname”)返回的是一个类Class。首先我们要明白在Java里面任何class都要装载在虚拟机上才可运行。这个方法就是用来装载类的（和new不一样，要分清楚）。</p>
+<p>如何创建一个类实例？很多人首先想到的就是new这个关键字，没错，使用new关键字确实可以创建我们想要的类实例。不过还有一种方法，如下所示：</p>
+<pre><code><span class="comment">//创建一个Person类的实例</span>
+<span class="keyword">Class</span> mClass=<span class="keyword">Class</span>.forName(<span class="string">"Person类的完整类名"</span>);
+Person person=mClass.newInstance();
+</code></pre><p>那么这两种创建类实例的方法有什么不同吗？</p>
+<p>首先创建对象的方式不一样，一个使用类加载机制，另一个是创建一个新类。那么为什么会有两种创建对象的方式？这主要考虑到软件的可伸缩、可扩展和可重用等软件设计思想。</p>
+<p>Java中工厂模式经常使用newInstance()方法来创建对象，因此从为什么要使用工厂模式上可以找到具体答案。</p>
+<p>从JVM的角度看，我们使用new创建一个类实例的时候，这个类可以没有被加载。但是使用newInstance()方法的时候，就必须要保证这个类已经加载，且这个类已经连接了。而完成上面两个步骤的正是forName()方法完成的，这个方法调用了启动类的加载器，即加载Java API的那个加载器。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">Class</span>&lt;?&gt; forName(String className)
+            <span class="keyword">throws</span> ClassNotFoundException {
+    <span class="keyword">return</span> forName0(className, <span class="keyword">true</span>,
+                    ClassLoader.getClassLoader(Reflection.getCallerClass()));
+}
+</code></pre><p>这个加载器也是加载Class的加载器。</p>
+<p>现在可以看出，newInstance()实际上是把new这个方式分解为两步，即首先调用Class加载方法加载某个类，然后实例化。这样分步的好处是显而易见的。我们可以在调用class的forName方法时获得更好的灵活性，提供了一种降耦的手段。</p>
+<p>此外，newInstance()效率比较低，只能调用无参构造。</p>
+<p>注意：静态代码是和Class绑定的，Class装载成功就表示执行了你的静态代码了。而且以后不会再走这段静态代码了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="cii73uilc001nyopxx3dwml8y" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Class/">Java Class</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/12/13/Android百分比布局学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android百分比布局学习</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
         
           <aside id="sidebar">

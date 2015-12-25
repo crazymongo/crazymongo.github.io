@@ -61,6 +61,131 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-EventBus学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/29/EventBus学习笔记/" class="article-date">
+  <time datetime="2015-10-29T02:48:02.000Z" itemprop="datePublished">2015-10-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/29/EventBus学习笔记/">EventBus学习笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当我们通过调用EventBus.register()方法来注册某个类时，EventBus内部执行过程如下：</p>
+<ol>
+<li>通过SubscriberMethodFinder类的findSubscriberMethods方法找出注册类中所有的以onEvent开头、修饰符为public、并且只有一个参数的方法，并将这些方法封装成SubscriberMethod对象存储在一个数组列表中。</li>
+<li>循环步骤1得到的列表，根据每个方法所处理的事件封装成不同的Subscription对象。EventBus内部依据事件类型，构建了一个名为subscriptionsByEventType的HashMap，这个HashMap以事件为键，将一个CopyOnWriteArrayList的列表作为值，这个列表中存储不同Subsriber中处理某个相同事件的方法，及Subscription对象。最后根据Subscription的优先级不同，将Subscription放在列表中不同的位置。EventBus内部还维护一个名为typesBySubscriber的HashMap，该HashMap用来保存某个注册类中所有能够处理的事件。</li>
+</ol>
+<p>当我们通过调用EventBus.unregister()方法来注销某个类时，EventBus内部执行过程如下：</p>
+<ol>
+<li>从HashMap typesBySubscriber中得到类所有订阅的事件类型列表</li>
+<li>循环该列表，根据每个事件，从HashMap subscriptionsByEventType中获取处理该事件的订阅列表，循环列表，从中移除属于注销类的订阅。</li>
+<li>最后从HashMap typesBySubscriber中移除该订阅者。</li>
+</ol>
+<p>当调用EventBus.post()方法来发布一个事件时，其内部流程如下：</p>
+<ol>
+<li>事件被放入PostingThreadState对象中的一个数组列表中。</li>
+<li>判断EventBus对象当前是否处于主线程。</li>
+<li>循环PostingThreadState对象中的事件列表，准备发布事件</li>
+<li>根据事件类型，获取之前的订阅列表。</li>
+<li>根据订阅方法的线程模式，调用订阅方法。</li>
+</ol>
+<p>每个订阅方法的线程模式分析：</p>
+<pre><code>EventBus有4个线程模式：
+
+-<span class="ruby"> <span class="constant">PostThread</span> 以onEvent作为方法名，订阅方法在产生事件的线程中被调用
+</span>-<span class="ruby"> <span class="constant">MainThread</span> 以onEventMainThread作为方法名，订阅方法在主线程中被调用
+</span>-<span class="ruby"> <span class="constant">BackgroudThread</span> 以onEventBackgroudThread作为方法名，订阅方法在后台线程中被调用
+</span>-<span class="ruby"> <span class="constant">Async</span> 以onEventAsync作为方法名，订阅方法在后台线程中被调用</span>
+</code></pre><p>如果是PostThread模式，订阅方法将会直接被调用执行。</p>
+<p>如果是MainThread模式，且事件是在主线程中产生的，则订阅方法将会直接被调用执行；若事件不在主线程中产生，将通过HandlerPoster对象调用订阅方法。</p>
+<p>如果是BackgroudThread模式，且事件是在主线程中产生的，将通过BackgroundPoster对象调用订阅方法；若事件不在主线程中产生，直接调用订阅方法。</p>
+<p>如果是Async模式，无论事件在什么线程中产生，都将通过AsyncPoster对象调用订阅方法。</p>
+<p>HandlerPoster类继承了Handler,里面包含一个保存订阅方法的队列，在handleMessage方法中循环该队列，调用订阅方法。</p>
+<p>BackgroundPoster和AsyncPoster都实现了Runnable方法，区别在于AsyncPoster只有在订阅进队时才执行，执行结束就跳出run方法，而BackgroundPoster可能会一直在run方法中运行。</p>
+<p>EventBus的eventInheritance属性分析：</p>
+<p>默认为true，个人认为这是事件连带机制，也就是说，如果事件A，继承了事件B、C等，若事件A发生，则事件B、C也会连带发生。</p>
+<p>EventBus粘性事件，及StickyEvent分析：</p>
+<p>当调用postSticky(SomeEvent event)方法时，被传递的事件event先被保存在内存中，然后调用普通的post方法。当用户使用registerSticky方法注册时，如果注册者里面包含处理某些处理粘性事件的方法时，这些方法将会被执行。</p>
+<p>此外，EventBus还支持高优先级的订阅者取消事件的传递，粘性事件的移除等。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="ciil5ecc6001kdgpxoaoosfjr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-EventBus/">android EventBus</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java-Future" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/20/Java-Future/" class="article-date">
+  <time datetime="2015-10-20T08:15:52.000Z" itemprop="datePublished">2015-10-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/20/Java-Future/">Java-Future</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Future表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。计算完成后只能使用get方法来获取结果，如果有必要，计算完成前可以阻塞此方法。取消则由cancel方法来执行。还提供了其他方法，以确定任务是正常完成还是被取消了。一旦计算完成，就不能再取消计算。如果为了可取消性而使用Future但又不提供可用的结果，则可以声明Future&lt;?&gt; 形式类型、并返回null作为底层任务的结果。</p>
+<p>RunnableFuture是一个作为Runnable的Future。成功执行run方法可以完成Future并允许访问其结果。其定义如下：</p>
+<pre><code>public <span class="keyword">interface</span> <span class="type">RunnableFuture</span>&lt;V&gt; extends <span class="type">Runnable</span>, <span class="type">Future</span>&lt;V&gt; {
+    /**
+     * <span class="type">Sets</span> this <span class="type">Future</span> to the <span class="literal">result</span> <span class="keyword">of</span> its computation
+     * unless it has been cancelled.
+     */
+    <span class="type">void</span> run();
+}
+</code></pre><p>FutureTask类是RunnableFuture的一个实现，是可取消的异步计算。利用开始和取消计算的方法、查询计算是否完成的方法和获取计算结果的方法，此类提供了对Future的基本实现。仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞get方法。一旦计算完成，就不能再重新开始或取消计算。</p>
+<p>可使用FutureTask包装Callable或Runnable对象。因为FutureTask实现了Runnable，所以可将FutureTask提交给Executor执行。</p>
+<p>除了作为一个独立的类型，此类还提供了protected功能，这在创建自定义任务类时可能很有用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="ciil5ecbm000pdgpxughb7add" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Future/">Java Future</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java-Callable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/20/Java-Callable/" class="article-date">
@@ -89,7 +214,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cii73uil0001ayopxdmvydy3g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="ciil5ecbz001adgpxs7ov9b00" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Callable/">Java Callable</a></li></ul>
@@ -130,7 +255,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="cii73uikr000vyopxj6l5ixzv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="ciil5ecbr000vdgpxw3bdt6rl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a></li></ul>
@@ -227,7 +352,7 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="cii73uikt000yyopxqwe6e0ag" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="ciil5ecbs000ydgpxh6d9s1lz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Executor/">Java Executor</a></li></ul>
@@ -292,7 +417,7 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="cii73uijk000cyopxhufcij14" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="ciil5ecay000cdgpxqzeh57th" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-线程池/">java 线程池</a></li></ul>
@@ -339,7 +464,7 @@ public void close() throws IOException {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/15/Java-ByteArrayOutputStream/" data-id="cii73uil2001dyopx0i9az39j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/15/Java-ByteArrayOutputStream/" data-id="ciil5ecc1001ddgpx4jwx9qca" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a></li></ul>
@@ -379,7 +504,7 @@ public void close() throws IOException {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-FilterOutputStream/" data-id="cii73uikp000syopxetie9rdv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/13/Java-FilterOutputStream/" data-id="ciil5ecbp000sdgpxovlumk3n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a></li></ul>
@@ -446,7 +571,7 @@ public void close() throws IOException;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-Closeable-Flushable/" data-id="cii73uiky0017yopxht50pmp4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/13/Java-Closeable-Flushable/" data-id="ciil5ecby0017dgpxn1glmth4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a></li></ul>
@@ -485,103 +610,10 @@ public void close() throws IOException;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-DataOutput/" data-id="cii73uikv0011yopxftpl1mpq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/13/Java-DataOutput/" data-id="ciil5ecbu0011dgpxl5uk04xr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-DataInput" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/12/Java-DataInput/" class="article-date">
-  <time datetime="2015-10-12T09:50:33.000Z" itemprop="datePublished">2015-10-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/12/Java-DataInput/">Java-DataInput</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>DataInput接口用于从二进制流中读取字节，并根据所有Java基本类型数据进行重构。同时还提供根据UTF-8修改版格式的数据重构String的工具</p>
-<p>对于此接口中的所有数据读取例程来说，如果在读取所需字节数之前已经到达文件末尾（end of file），则抛出EOFException。如果由于某种原因无法读取任何字节，而不是在读取所需数量的字节之前已到达文件末尾，则抛出IOException，而不是EOFException。需要特别指出的是，如果流已被关闭，则可能抛出IOException。</p>
-<p>相关方法介绍：</p>
-<p><strong>void readFully(byte b[]) throws IOException</strong></p>
-<p>从输入流中读取一些字节，并将它们存储在缓冲区数组b中。读取的字节数等于b的长度。</p>
-<p>在出现以下条件之一以前，此方法将一直阻塞：</p>
-<ul>
-<li>输入数据的b.length个字节是可用的，在这种情况下，正常返回。</li>
-<li>检测到文件末尾，在这种情况下，抛出EOFException。</li>
-<li>发生I/O错误，在这种情况下，抛出IOException。</li>
-</ul>
-<p><strong>int skipBytes(int n) throws IOException</strong></p>
-<p>视图在输入流中跳过数据的n个字节，并丢弃跳过的字节。不过，可以跳过更少的字节数，该字节数甚至可以为零。这可能由很多情况引起；在已经跳过n个字节前到达文件末尾只是其中的一种可能。</p>
-<p>该方法返回实际跳过的字节数。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/12/Java-DataInput/" data-id="cii73uikx0014yopxal5lualg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-DataInput/">java DataInput</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-Studio-Gradle-初识" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/09/Android-Studio-Gradle-初识/" class="article-date">
-  <time datetime="2015-10-09T06:10:33.000Z" itemprop="datePublished">2015-10-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/09/Android-Studio-Gradle-初识/">Android-Studio-Gradle-初识</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用Android Studio新建一个工程后，默认会生成两个build.gradle文件，一个位于工程根目录，一个位于App目录下。还有另外一个文件settings.gradle。</p>
-<p>根目录下的脚本文件是针对module的全局配置，它的作用域包含的所有module是通过settings.gradle来配置的。</p>
-<p>App文件夹就是一个module，如果在当前工程中添加了一个新的module，就需要在settings.gradle文件中包含这个新的module。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/09/Android-Studio-Gradle-初识/" data-id="cii73uilk001zyopx3r240csw" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a></li></ul>
 
     </footer>
   </div>
@@ -605,7 +637,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -614,7 +646,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -623,7 +655,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -635,6 +667,14 @@ public void close() throws IOException;
       <ul>
         
           <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+          </li>
+        
+          <li>
             <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
           </li>
         
@@ -644,14 +684,6 @@ public void close() throws IOException;
         
           <li>
             <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/09/闭包/">闭包</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/20/Servlet/">Servlet</a>
           </li>
         
       </ul>

@@ -61,6 +61,99 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java-DataInput" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/12/Java-DataInput/" class="article-date">
+  <time datetime="2015-10-12T09:50:33.000Z" itemprop="datePublished">2015-10-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/12/Java-DataInput/">Java-DataInput</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>DataInput接口用于从二进制流中读取字节，并根据所有Java基本类型数据进行重构。同时还提供根据UTF-8修改版格式的数据重构String的工具</p>
+<p>对于此接口中的所有数据读取例程来说，如果在读取所需字节数之前已经到达文件末尾（end of file），则抛出EOFException。如果由于某种原因无法读取任何字节，而不是在读取所需数量的字节之前已到达文件末尾，则抛出IOException，而不是EOFException。需要特别指出的是，如果流已被关闭，则可能抛出IOException。</p>
+<p>相关方法介绍：</p>
+<p><strong>void readFully(byte b[]) throws IOException</strong></p>
+<p>从输入流中读取一些字节，并将它们存储在缓冲区数组b中。读取的字节数等于b的长度。</p>
+<p>在出现以下条件之一以前，此方法将一直阻塞：</p>
+<ul>
+<li>输入数据的b.length个字节是可用的，在这种情况下，正常返回。</li>
+<li>检测到文件末尾，在这种情况下，抛出EOFException。</li>
+<li>发生I/O错误，在这种情况下，抛出IOException。</li>
+</ul>
+<p><strong>int skipBytes(int n) throws IOException</strong></p>
+<p>视图在输入流中跳过数据的n个字节，并丢弃跳过的字节。不过，可以跳过更少的字节数，该字节数甚至可以为零。这可能由很多情况引起；在已经跳过n个字节前到达文件末尾只是其中的一种可能。</p>
+<p>该方法返回实际跳过的字节数。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/12/Java-DataInput/" data-id="ciil5ecbw0014dgpxnxhex1lf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-DataInput/">java DataInput</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-Studio-Gradle-初识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/09/Android-Studio-Gradle-初识/" class="article-date">
+  <time datetime="2015-10-09T06:10:33.000Z" itemprop="datePublished">2015-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/09/Android-Studio-Gradle-初识/">Android-Studio-Gradle-初识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用Android Studio新建一个工程后，默认会生成两个build.gradle文件，一个位于工程根目录，一个位于App目录下。还有另外一个文件settings.gradle。</p>
+<p>根目录下的脚本文件是针对module的全局配置，它的作用域包含的所有module是通过settings.gradle来配置的。</p>
+<p>App文件夹就是一个module，如果在当前工程中添加了一个新的module，就需要在settings.gradle文件中包含这个新的module。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/09/Android-Studio-Gradle-初识/" data-id="ciil5eccg0020dgpxjd2elhrf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java常用工具" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/08/Java常用工具/" class="article-date">
@@ -88,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/08/Java常用工具/" data-id="cii73uik8000oyopxp0flv01q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/08/Java常用工具/" data-id="ciil5ecbc000odgpxeglog1bn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -132,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/25/RESTful/" data-id="cii73uik0000jyopxy21dvxyt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/25/RESTful/" data-id="ciil5ecb4000jdgpx28ff1gds" class="article-share-link">Share</a>
       
       
     </footer>
@@ -294,7 +387,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/24/Android-Messenger分析/" data-id="cii73uiln0022yopx5fp0g9ib" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/24/Android-Messenger分析/" data-id="ciil5eccl0026dgpxotiad683" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a></li></ul>
@@ -350,7 +443,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/23/Android-Looper/" data-id="cii73uilq0028yopx8ok2a2ox" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/23/Android-Looper/" data-id="ciil5eccp002cdgpx5skalskh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -465,7 +558,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/23/Android-Handler分析/" data-id="cii73uils0029yopxoycy1mhp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/23/Android-Handler分析/" data-id="ciil5eccs002ddgpxztpaekan" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Handler/">Android Handler</a></li></ul>
@@ -506,7 +599,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Android-Message分析/" data-id="cii73uilp0025yopxsenib0a2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/22/Android-Message分析/" data-id="ciil5eccn0029dgpx8xxoumry" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Message/">Android Message</a></li></ul>
@@ -550,7 +643,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/负载均衡算法/" data-id="cii73uijb0006yopxqouoiw0a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/22/负载均衡算法/" data-id="ciil5ec7a0006dgpx98l90lam" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a></li></ul>
@@ -614,155 +707,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Java Immutable对象/" data-id="cii73uil4001gyopx8mxtqqbb" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Volley源码分析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/22/Volley源码分析/" class="article-date">
-  <time datetime="2015-09-22T03:04:29.665Z" itemprop="datePublished">2015-09-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/22/Volley源码分析/">Volley源码分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通过阅读源码，Volley的主要部件如下所示：</p>
-<ul>
-<li><p>Request 用来封装每一次的请求行为</p>
-</li>
-<li><p>Response 用来封装每一次的请求结果</p>
-</li>
-<li><p>RequestQueue 暂存客户端请求的一个有序队列</p>
-</li>
-<li><p>NetworkDispatcher 从RequestQueue 获取Request，并执行该Request，其本身是一个独立的线程，Volley默认建立包括4个NetworkDispatcher 的线程池，用来处理请求。</p>
-</li>
-<li><p>Network 用来执行具体的请求操作，并处理请求结果，并将结果封装成NetworkResponse，默认使用BasicNetwork实现。</p>
-</li>
-<li><p>ResponseDelivery 用来将Network返回的NetworkResponse对象，返回给客户端。</p>
-</li>
-</ul>
-<p>下面是我总结的Volley执行流程：</p>
-<p>NetworkDispatcher 从RequestQueue取得请求，然后调用Network.performRequest方法，服务端返回后Network将返回封装成NetworkResponse，然后调用ResponseDelivery.postResponse方法将响应传递给主线程，其内部是通过一个执行器Executor进行处理，使用一个handler与主线程通信。</p>
-<p>可借鉴的编程方法：</p>
-<ul>
-<li><p>面向接口编程 </p>
-</li>
-<li><p>聚合原则</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Volley源码分析/" data-id="cii73uijv000fyopxi4b4ynoo" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java编程原则" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/22/Java编程原则/" class="article-date">
-  <time datetime="2015-09-22T03:00:23.418Z" itemprop="datePublished">2015-09-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/22/Java编程原则/">Java编程原则</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>开-闭原则</strong></p>
-<p>一个软件实体应对对扩展开放，对修改关闭。其中抽象化是关键。<br>“开-闭”原则如果从另外一个角度讲述，就是所谓的“对可变性的封装原则”，也就是找到一个系统的可变因素，将之封装起来。<br>“对可变性的封装原则”意味着两点：<br>（1）一种可变性不应当散落在代码的很多角落里，而应当被封装到一个对象里面。同一种可变性的不同表象意味着同一个继承等级结构中的具体子类。继承应当被看做是封装变化的方法，而不应当被认为是从一般的对象生成特殊的对象的方法。<br>（2）一种可变性不应当与另一种可变性混合在一起</p>
-<p><strong>里氏代换原则</strong></p>
-<p>一个软件实体如果使用的是一个基类的话，那么一定适用于其子类，而且它根本不能觉察出基类对象和子类对象的区别。<br>里氏代换原则是继承复用的基石。只有当子类可以替换掉基类，软件单位的功能不会受到影响时，基类才能真正被复用，而子类也才能够在基类的基础上增加新的行为。</p>
-<p><strong>依赖倒转原则</strong></p>
-<p>实现“开-闭”原则的关键是抽象化，并且从抽象化导出具体实现。如果说“开-闭”原则是面向对象设计的目标的话，依赖倒转原则就是这个面向对象设计的主要机制。<br>依赖倒转原则讲的是：要依赖于抽象，不要依赖于具体。<br>依赖倒转原则是COM、CORBA、JavaBean以及EJB等构建设计模型背后的基本原则。<br>在面向对象里，两个类之间可以发生三种不同的依赖（耦合）关系：</p>
-<ul>
-<li><p>零耦合：如果两个类没有耦合关系，就称为零耦合。</p>
-</li>
-<li><p>具体耦合：具体性耦合发生在两个具体的（可实例化的）类之间，经由一个类对另一个类的直接引用造成。</p>
-</li>
-<li><p>抽象耦合：发生在一个具体类和一个抽象类（或接口）之间，使两个必须发生关系的类之间存在最大的灵活性。</p>
-</li>
-</ul>
-<p>依赖倒转原则要求客户端依赖于抽象耦合。依赖倒转原则的表述是：抽象不应该依赖细节；细节应当依赖于抽象。另一种表述是：要针对接口编程，不要针对实现编程。针对接口编程的意思就是说，因应当使用Java接口和抽象Java类进行变量的类型声明、参量的类型声明、方法的返回类型声明，以及数据类型的转换等。要保证做到这一点，一个具体Java类应当只实现Java接口和抽象Java类中声明过的方法，而不应当给出多余的方法。</p>
-<p>变量被声明时的类型叫做变量的静态类型，变量所引用的对象的真实类型叫做变量的实际类型。在很多情况下，一个Java程序需要引用一个对象。这个时候，如果这个对象有一个抽象类型的话，应当使用抽象类型作为变量的静态类型。这就是针对接口编程的含义。</p>
-<p><strong>接口隔离原则</strong></p>
-<p>接口隔离原则讲的是：使用多个专门的接口比使用单一的总接口要好。换言之，从一个客户类的角度来讲：一个类对另一个类的依赖性应当是建立在最小接口上的。</p>
-<p>一个接口相当于剧本中的一个角色，而此角色在一个舞台上由哪一个演员来演则相当于接口的实现。因此，一个接口应带简单地代表一个角色。如果系统涉及到多个角色的话，那么每一个角色应当由一个特定的接口代表。</p>
-<p><strong>聚合复用原则</strong></p>
-<p>聚合复用原则就是在一个新的对象里面使用一些已有的对象，使之成为新对象的一部分；新的对象通过向这些对象的委派达到复用已有功能的目的。这个设计原则有另一个更简短的表述：要尽量使用聚合，尽量不要使用继承。</p>
-<p>聚合复用的好处：</p>
-<ul>
-<li><p>新对象存取成分对象的唯一方法是通过成分对象的接口。</p>
-</li>
-<li><p>这种复用是黑箱复用，因为成分对象的内部细节是新对象所看不见的。</p>
-</li>
-<li><p>这种复用支持包装。</p>
-</li>
-<li><p>每一个新的类可以将焦点集中在一个任务上。</p>
-</li>
-<li><p>这种复用可以在运行时间内动态进行，新对象可以动态地引用与成分对象类型相同的对象。</p>
-</li>
-</ul>
-<p>继承复用的好处：</p>
-<ul>
-<li><p>新的实现较为容易，因为父类的大部分功能可以通过继承关系自动进入子类。</p>
-</li>
-<li><p>修改或扩展继承而来的实现较为容易。</p>
-</li>
-</ul>
-<p>继承复用的缺点：</p>
-<ul>
-<li><p>继承复用破坏包装，因为继承将父类的实现细节暴露给子类。由于父类的内部细节常常是对子类透明的，因此这种复用是透明的复用，又称“白箱”复用。</p>
-</li>
-<li><p>如果父类的实现发生改变，那么子类的实现也不得不发生改变。因此，一个基类发生改变时，这种改变会像水中投入石子引起的水波一样，将变化一圈一圈地传导到一级一级的子类，使设计师不得不相应地改变这些子类，以适应父类的变化。</p>
-</li>
-<li><p>从父类继承而来的实现是静态的，不可能在运行时间内发生改变，因此没有足够的灵活性。</p>
-</li>
-</ul>
-<p><strong>迪米特法则</strong></p>
-<p>迪米特法则又叫最少知识原则，就是说，一个对象应当对其他对象有尽可能少的了解。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/Java编程原则/" data-id="cii73uik2000kyopxj1e07oft" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/22/Java Immutable对象/" data-id="ciil5ecc3001gdgpxc5r226en" class="article-share-link">Share</a>
       
       
     </footer>
@@ -787,7 +732,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -796,7 +741,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -805,7 +750,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -817,6 +762,14 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       <ul>
         
           <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+          </li>
+        
+          <li>
             <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
           </li>
         
@@ -826,14 +779,6 @@ public <span class="class"><span class="keyword">class</span> <span class="title
         
           <li>
             <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/09/闭包/">闭包</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/20/Servlet/">Servlet</a>
           </li>
         
       </ul>

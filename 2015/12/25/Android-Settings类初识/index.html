@@ -3,17 +3,45 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Java Executor | crazymongo</title>
+  <title>Android-Settings类初识 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="crazymongo">
-<meta property="og:url" content="http://yoursite.com/tags/Java-Executor/index.html">
+  <meta name="description" content="Settings类的作用主要是提供系统级别的全局设置。
+Settings类中包含Intent的Action常量，通过调用可以打开相应的设置界面。例如：
+/**
+ * Activity Action: Show system settings.
+ * &amp;lt;p&amp;gt;
+ * Input: Nothing.
+ * &amp;lt;p&amp;gt;
+ * Output: Nothing.
+ */
+@SdkConst">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-Settings类初识">
+<meta property="og:url" content="http://yoursite.com/2015/12/25/Android-Settings类初识/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description">
+<meta property="og:description" content="Settings类的作用主要是提供系统级别的全局设置。
+Settings类中包含Intent的Action常量，通过调用可以打开相应的设置界面。例如：
+/**
+ * Activity Action: Show system settings.
+ * &amp;lt;p&amp;gt;
+ * Input: Nothing.
+ * &amp;lt;p&amp;gt;
+ * Output: Nothing.
+ */
+@SdkConst">
+<meta property="og:updated_time" content="2015-12-25T03:57:49.576Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="crazymongo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android-Settings类初识">
+<meta name="twitter:description" content="Settings类的作用主要是提供系统级别的全局设置。
+Settings类中包含Intent的Action常量，通过调用可以打开相应的设置界面。例如：
+/**
+ * Activity Action: Show system settings.
+ * &amp;lt;p&amp;gt;
+ * Input: Nothing.
+ * &amp;lt;p&amp;gt;
+ * Output: Nothing.
+ */
+@SdkConst">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -59,39 +87,92 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/20/Java-Executor/" class="archive-article-date">
-  <time datetime="2015-10-20T05:58:27.000Z" itemprop="datePublished">Oct 20</time>
+        <section id="main"><article id="post-Android-Settings类初识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/25/Android-Settings类初识/" class="article-date">
+  <time datetime="2015-12-25T03:57:49.000Z" itemprop="datePublished">2015-12-25</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/20/Java-Executor/">Java-Executor</a>
+    <h1 class="article-title" itemprop="name">
+      Android-Settings类初识
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Settings类的作用主要是提供系统级别的全局设置。</p>
+<p>Settings类中包含Intent的Action常量，通过调用可以打开相应的设置界面。例如：</p>
+<pre><code>/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Activity Action: Show system settings.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Input: Nothing.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Output: Nothing.
+ <span class="keyword">*</span>/
+<span class="comment">@SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)</span>
+public static final String ACTION_SETTINGS = <span class="string">"android.settings.SETTINGS"</span>;
+
+/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Activity Action: Show settings to allow configuration of wireless controls
+ <span class="keyword">*</span> such as Wi-Fi, Bluetooth and Mobile networks.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> In some cases, a matching Activity may not exist, so ensure you
+ <span class="keyword">*</span> safeguard against this.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Input: Nothing.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Output: Nothing.
+ <span class="keyword">*</span>/
+<span class="comment">@SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)</span>
+public static final String ACTION_WIRELESS_SETTINGS =
+        <span class="string">"android.settings.WIRELESS_SETTINGS"</span>;
+</code></pre><p><strong>Settings内部类System</strong></p>
+<p>系统设置表，包含各种各样的系统设置，以名值对的形式进行存储。System类提供了一些方便的方法去访问这些个人设置。</p>
+<p>通过这个类，我们也可以把应用中的一些需要持久化保存的简单的数据保存到系统设置表，即使应用被卸载了，这些数据仍会存在。恢复出厂化设置，数据就会被清除了。</p>
+<pre><code>Settings<span class="class">.System</span><span class="class">.putString</span>(<span class="function"><span class="title">getContentResolver</span><span class="params">()</span></span>, <span class="string">"crazymongo"</span>, <span class="string">"test system store"</span>)；
+Settings<span class="class">.System</span><span class="class">.getString</span>(<span class="function"><span class="title">getContentResolver</span><span class="params">()</span></span>, <span class="string">"crazymongo"</span>)；
+</code></pre><p><strong>Settings内部类Secure</strong></p>
+<p>Secure system settings, containing system preferences that applications can read but are not allowed to write.  These are for preferences that the user must explicitly modify through the system UI or specialized APIs for those values, not modified directly by applications.（就不翻译了，Poor English）</p>
+<p><strong>Settings内部类Global</strong></p>
+<p>Global system settings, containing preferences that always apply identically to all defined users.  Applications can read these but are not allowed to write;like the “Secure” settings, these are for preferences that the user must explicitly modify through the system UI or specialized APIs for those values.</p>
+<p><strong>Settings内部类Bookmarks</strong></p>
+<p>User-defined bookmarks and shortcuts.  The target of each bookmark is an Intent URL, allowing it to be either a web page or a particular application activity.</p>
+<p>在查看源码的的过程中发现ContentValues这个类，该类使用一个HashMap<string, object="">存储数据，并封装了一下常用的工具。</string,></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="ciil5eccj0023dgpx9ju6il68" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Settings/">Android Settings</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/12/22/Android-plugin-for-gradle/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android_plugin_for_gradle</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
         
           <aside id="sidebar">

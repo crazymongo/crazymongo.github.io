@@ -61,6 +61,120 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-Settings类初识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/25/Android-Settings类初识/" class="article-date">
+  <time datetime="2015-12-25T03:57:49.000Z" itemprop="datePublished">2015-12-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Settings类的作用主要是提供系统级别的全局设置。</p>
+<p>Settings类中包含Intent的Action常量，通过调用可以打开相应的设置界面。例如：</p>
+<pre><code>/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Activity Action: Show system settings.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Input: Nothing.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Output: Nothing.
+ <span class="keyword">*</span>/
+<span class="comment">@SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)</span>
+public static final String ACTION_SETTINGS = <span class="string">"android.settings.SETTINGS"</span>;
+
+/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Activity Action: Show settings to allow configuration of wireless controls
+ <span class="keyword">*</span> such as Wi-Fi, Bluetooth and Mobile networks.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> In some cases, a matching Activity may not exist, so ensure you
+ <span class="keyword">*</span> safeguard against this.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Input: Nothing.
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> Output: Nothing.
+ <span class="keyword">*</span>/
+<span class="comment">@SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)</span>
+public static final String ACTION_WIRELESS_SETTINGS =
+        <span class="string">"android.settings.WIRELESS_SETTINGS"</span>;
+</code></pre><p><strong>Settings内部类System</strong></p>
+<p>系统设置表，包含各种各样的系统设置，以名值对的形式进行存储。System类提供了一些方便的方法去访问这些个人设置。</p>
+<p>通过这个类，我们也可以把应用中的一些需要持久化保存的简单的数据保存到系统设置表，即使应用被卸载了，这些数据仍会存在。恢复出厂化设置，数据就会被清除了。</p>
+<pre><code>Settings<span class="class">.System</span><span class="class">.putString</span>(<span class="function"><span class="title">getContentResolver</span><span class="params">()</span></span>, <span class="string">"crazymongo"</span>, <span class="string">"test system store"</span>)；
+Settings<span class="class">.System</span><span class="class">.getString</span>(<span class="function"><span class="title">getContentResolver</span><span class="params">()</span></span>, <span class="string">"crazymongo"</span>)；
+</code></pre><p><strong>Settings内部类Secure</strong></p>
+<p>Secure system settings, containing system preferences that applications can read but are not allowed to write.  These are for preferences that the user must explicitly modify through the system UI or specialized APIs for those values, not modified directly by applications.（就不翻译了，Poor English）</p>
+<p><strong>Settings内部类Global</strong></p>
+<p>Global system settings, containing preferences that always apply identically to all defined users.  Applications can read these but are not allowed to write;like the “Secure” settings, these are for preferences that the user must explicitly modify through the system UI or specialized APIs for those values.</p>
+<p><strong>Settings内部类Bookmarks</strong></p>
+<p>User-defined bookmarks and shortcuts.  The target of each bookmark is an Intent URL, allowing it to be either a web page or a particular application activity.</p>
+<p>在查看源码的的过程中发现ContentValues这个类，该类使用一个HashMap<string, object="">存储数据，并封装了一下常用的工具。</string,></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="ciil5eccj0023dgpx9ju6il68" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Settings/">Android Settings</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-plugin-for-gradle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/22/Android-plugin-for-gradle/" class="article-date">
+  <time datetime="2015-12-22T09:03:37.000Z" itemprop="datePublished">2015-12-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android构建系统包含一个Android插件工具。Gradle是一个高级的构建工具，可以用来管理依赖，允许用户定义自己的构建逻辑。</p>
+<p>The Android plugin for Gradle独立于AS运行。也就是说，我们不仅可以在AS中构建程序，也可以通过本机的命令行或者没有安装AS的机器上构建程序。无论通过哪种构建方式，结果都是相同的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/22/Android-plugin-for-gradle/" data-id="ciil5eccf001zdgpxotpi4hpa" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Class-forName作用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/15/Class-forName作用/" class="article-date">
@@ -101,11 +215,12 @@ Person person=mClass.newInstance();
 <p>现在可以看出，newInstance()实际上是把new这个方式分解为两步，即首先调用Class加载方法加载某个类，然后实例化。这样分步的好处是显而易见的。我们可以在调用class的forName方法时获得更好的灵活性，提供了一种降耦的手段。</p>
 <p>此外，newInstance()效率比较低，只能调用无参构造。</p>
 <p>注意：静态代码是和Class绑定的，Class装载成功就表示执行了你的静态代码了。而且以后不会再走这段静态代码了。</p>
+<p>通过Class.forName方法可以实现预加载功能，提高程序效率。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="cii73uilc001nyopxx3dwml8y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="ciil5ecc8001ndgpxbxpg4w8j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Class/">Java Class</a></li></ul>
@@ -414,7 +529,7 @@ Person person=mClass.newInstance();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="cii73uilh001tyopxi87ewjvd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="ciil5eccc001tdgpxrvz7ejlz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a></li></ul>
@@ -494,7 +609,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="cii73uili001wyopxfxpbbyh7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="ciil5eccd001wdgpxaw54e8md" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a></li></ul>
@@ -533,7 +648,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cii73uiik0003yopxqpfecmic" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="ciil5ec6u0003dgpx6kudss4y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
@@ -615,7 +730,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="cii73uijx000gyopxr6jhjwur" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="ciil5ecb2000gdgpxgkrwdm3d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Servlet/">Servlet</a></li></ul>
@@ -663,7 +778,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="cii73uile001qyopx77f2125e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="ciil5ecca001qdgpxx9knqbl3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CGI/">CGI</a></li></ul>
@@ -725,7 +840,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cii73uik5000lyopxpskl4n1o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="ciil5ecb9000ldgpx1krrq4n8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
@@ -854,135 +969,10 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cii73uijg0009yopx5bncc4q1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="ciil5ecai0009dgpxhn8ajolp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-EventBus学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/29/EventBus学习笔记/" class="article-date">
-  <time datetime="2015-10-29T02:48:02.000Z" itemprop="datePublished">2015-10-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/29/EventBus学习笔记/">EventBus学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>当我们通过调用EventBus.register()方法来注册某个类时，EventBus内部执行过程如下：</p>
-<ol>
-<li>通过SubscriberMethodFinder类的findSubscriberMethods方法找出注册类中所有的以onEvent开头、修饰符为public、并且只有一个参数的方法，并将这些方法封装成SubscriberMethod对象存储在一个数组列表中。</li>
-<li>循环步骤1得到的列表，根据每个方法所处理的事件封装成不同的Subscription对象。EventBus内部依据事件类型，构建了一个名为subscriptionsByEventType的HashMap，这个HashMap以事件为键，将一个CopyOnWriteArrayList的列表作为值，这个列表中存储不同Subsriber中处理某个相同事件的方法，及Subscription对象。最后根据Subscription的优先级不同，将Subscription放在列表中不同的位置。EventBus内部还维护一个名为typesBySubscriber的HashMap，该HashMap用来保存某个注册类中所有能够处理的事件。</li>
-</ol>
-<p>当我们通过调用EventBus.unregister()方法来注销某个类时，EventBus内部执行过程如下：</p>
-<ol>
-<li>从HashMap typesBySubscriber中得到类所有订阅的事件类型列表</li>
-<li>循环该列表，根据每个事件，从HashMap subscriptionsByEventType中获取处理该事件的订阅列表，循环列表，从中移除属于注销类的订阅。</li>
-<li>最后从HashMap typesBySubscriber中移除该订阅者。</li>
-</ol>
-<p>当调用EventBus.post()方法来发布一个事件时，其内部流程如下：</p>
-<ol>
-<li>事件被放入PostingThreadState对象中的一个数组列表中。</li>
-<li>判断EventBus对象当前是否处于主线程。</li>
-<li>循环PostingThreadState对象中的事件列表，准备发布事件</li>
-<li>根据事件类型，获取之前的订阅列表。</li>
-<li>根据订阅方法的线程模式，调用订阅方法。</li>
-</ol>
-<p>每个订阅方法的线程模式分析：</p>
-<pre><code>EventBus有4个线程模式：
-
--<span class="ruby"> <span class="constant">PostThread</span> 以onEvent作为方法名，订阅方法在产生事件的线程中被调用
-</span>-<span class="ruby"> <span class="constant">MainThread</span> 以onEventMainThread作为方法名，订阅方法在主线程中被调用
-</span>-<span class="ruby"> <span class="constant">BackgroudThread</span> 以onEventBackgroudThread作为方法名，订阅方法在后台线程中被调用
-</span>-<span class="ruby"> <span class="constant">Async</span> 以onEventAsync作为方法名，订阅方法在后台线程中被调用</span>
-</code></pre><p>如果是PostThread模式，订阅方法将会直接被调用执行。</p>
-<p>如果是MainThread模式，且事件是在主线程中产生的，则订阅方法将会直接被调用执行；若事件不在主线程中产生，将通过HandlerPoster对象调用订阅方法。</p>
-<p>如果是BackgroudThread模式，且事件是在主线程中产生的，将通过BackgroundPoster对象调用订阅方法；若事件不在主线程中产生，直接调用订阅方法。</p>
-<p>如果是Async模式，无论事件在什么线程中产生，都将通过AsyncPoster对象调用订阅方法。</p>
-<p>HandlerPoster类继承了Handler,里面包含一个保存订阅方法的队列，在handleMessage方法中循环该队列，调用订阅方法。</p>
-<p>BackgroundPoster和AsyncPoster都实现了Runnable方法，区别在于AsyncPoster只有在订阅进队时才执行，执行结束就跳出run方法，而BackgroundPoster可能会一直在run方法中运行。</p>
-<p>EventBus的eventInheritance属性分析：</p>
-<p>默认为true，个人认为这是事件连带机制，也就是说，如果事件A，继承了事件B、C等，若事件A发生，则事件B、C也会连带发生。</p>
-<p>EventBus粘性事件，及StickyEvent分析：</p>
-<p>当调用postSticky(SomeEvent event)方法时，被传递的事件event先被保存在内存中，然后调用普通的post方法。当用户使用registerSticky方法注册时，如果注册者里面包含处理某些处理粘性事件的方法时，这些方法将会被执行。</p>
-<p>此外，EventBus还支持高优先级的订阅者取消事件的传递，粘性事件的移除等。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cii73uil8001kyopxtq5l2s4k" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-EventBus/">android EventBus</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-Future" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/20/Java-Future/" class="article-date">
-  <time datetime="2015-10-20T08:15:52.000Z" itemprop="datePublished">2015-10-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/20/Java-Future/">Java-Future</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Future表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。计算完成后只能使用get方法来获取结果，如果有必要，计算完成前可以阻塞此方法。取消则由cancel方法来执行。还提供了其他方法，以确定任务是正常完成还是被取消了。一旦计算完成，就不能再取消计算。如果为了可取消性而使用Future但又不提供可用的结果，则可以声明Future&lt;?&gt; 形式类型、并返回null作为底层任务的结果。</p>
-<p>RunnableFuture是一个作为Runnable的Future。成功执行run方法可以完成Future并允许访问其结果。其定义如下：</p>
-<pre><code>public <span class="keyword">interface</span> <span class="type">RunnableFuture</span>&lt;V&gt; extends <span class="type">Runnable</span>, <span class="type">Future</span>&lt;V&gt; {
-    /**
-     * <span class="type">Sets</span> this <span class="type">Future</span> to the <span class="literal">result</span> <span class="keyword">of</span> its computation
-     * unless it has been cancelled.
-     */
-    <span class="type">void</span> run();
-}
-</code></pre><p>FutureTask类是RunnableFuture的一个实现，是可取消的异步计算。利用开始和取消计算的方法、查询计算是否完成的方法和获取计算结果的方法，此类提供了对Future的基本实现。仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞get方法。一旦计算完成，就不能再重新开始或取消计算。</p>
-<p>可使用FutureTask包装Callable或Runnable对象。因为FutureTask实现了Runnable，所以可将FutureTask提交给Executor执行。</p>
-<p>除了作为一个独立的类型，此类还提供了protected功能，这在创建自定义任务类时可能很有用。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cii73uikn000pyopxmw1lbhr2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Future/">Java Future</a></li></ul>
 
     </footer>
   </div>
@@ -1006,7 +996,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1015,7 +1005,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -1024,7 +1014,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -1036,6 +1026,14 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       <ul>
         
           <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+          </li>
+        
+          <li>
             <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
           </li>
         
@@ -1045,14 +1043,6 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
         
           <li>
             <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/09/闭包/">闭包</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/20/Servlet/">Servlet</a>
           </li>
         
       </ul>

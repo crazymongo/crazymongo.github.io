@@ -61,6 +61,190 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-HashSet和HashMap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/13/HashSet和HashMap/" class="article-date">
+  <time datetime="2016-01-13T09:59:07.000Z" itemprop="datePublished">2016-01-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>HashSet</strong></p>
+<p>HashSet实现了Set接口，内部由哈希表（实际上是HashMap实例）支持。HashSet不保证集合的迭代顺序，特别是它不保证该顺序恒久不变。HashSet允许null元素。</p>
+<p>HashSet是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchronizedSet(new HashSet(…))方法。</p>
+<p>通过HashSet的iterator()方法获得的迭代器是“fail-fast”：在获取迭代器之后，除了通过迭代器本身移除元素之外，其它任何对集合的修改都将导致迭代器抛出ConcurrentModificationException。因此，面对并发修改，迭代器很快就会失败，而不冒将来在某个不确定时间发生任何不确定行为的风险。</p>
+<p><strong>HashMap</strong></p>
+<p>HashMap是基于哈希表的Map接口的实现。此实现提供所有可选的映射操作，并允许null值和null键。（除了非同步和允许使用null之外，HashMap类与Hashtable大致相同）。HashMap不保证映射的顺序，特别是它不保证顺序恒久不变。</p>
+<p>有两个参数影响HashMap的性能，及初识容量和加载因子。容量是哈希表中桶的数量，初识容量只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对哈希表进行rehash操作（即重建内部数据结构），从而哈希表将具有大约两倍的容量。</p>
+<p>通常，默认加载因子（.75）在时间和空间成本上寻求一种折衷。加载因子过高虽然减少了空间开销，但同时也增加了查询成本。</p>
+<p>HashMap是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchronizedMap(new HashMap(…))方法。</p>
+<p>由所有此类的“collection 视图方法”所返回的迭代器都是快速失败 的：在迭代器创建之后，如果从结构上对映射进行修改，除非通过迭代器本身的 remove 方法，其他任何时间任何方式的修改，迭代器都将抛出 ConcurrentModificationException。因此，面对并发的修改，迭代器很快就会完全失败，而不冒在将来不确定的时间发生任意不确定行为的风险。</p>
+<p><strong>Hashtable</strong></p>
+<p>Hashtable实现一个哈希表，该哈希表将键映射到相应的值。任何非null对象都可以作为键或值。</p>
+<p>为了成功地在哈希表中存储和获取对象，用作键的对象必须实现hashCode方法和equals方法。</p>
+<p>Hashtable是同步的，如果程序不需要线程安全的哈希表实现，推荐使用HashMap。如果需要线程安全、高并发的哈希表实现，推荐使用ConcurrentHashMap。</p>
+<p><strong>TreeMap</strong></p>
+<p>TreeMap是基于红黑树（Red-Black tree）的NavigableMap实现。该映射根据其键的自然顺序进行排序，或者根据创建时提供的Comparator进行排序，具体取决于使用的构造方法。</p>
+<p>TreeMap为方法contrainKey、get、put和remove等操作提供受保证的log(n)时间开销。</p>
+<p><strong>TreeSet</strong></p>
+<p>TreeSet是基于TreeMap的NavigableSet实现。使用元素的自然顺序对元素进行排序，或者根据创建Set时提供的Comparator进行排序。此实现为基本操作（add、remove 和 contains）提供受保证的 log(n) 时间开销。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/01/13/HashSet和HashMap/" data-id="cik95uvzj001m08pxo1pjwgkv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-UniversalImageLoader-MemoryCache" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/" class="article-date">
+  <time datetime="2016-01-03T11:21:37.000Z" itemprop="datePublished">2016-01-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UniversalImageLoader提供多种内存缓存策略，大致分为三类：</p>
+<ul>
+<li>内存缓存大小固定的内存缓存策略</li>
+<li>可以由用户设定内存缓存空间大小的缓存策略</li>
+<li>没有内存大小限定的缓存策略</li>
+</ul>
+<p>首先，我们先来学习一下内存缓存大小固定的内存缓存策略，其中框架提供了多种实现，包括：FIFOLimitedMemoryCache, LargestLimitedMemoryCache, UsingFreqLimitedMemoryCache, LRULimitedMemoryCache。这几个类都继承了抽象类LimitedMemoryCache。而LimitedMemoryCache派生自BaseMemoryCache。</p>
+<p>抽象类BaseMemoryCache基本实现了对象的软缓存，其内部通过HashMap<string, reference<bitmap="">&gt;())的对象来保存对象引用。</string,></p>
+<p>抽象类LimitedMemoryCache基本实现了对象的硬缓存，其内部通过LinkedList<bitmap>的对象来保存对象引用。该类规定了最大的内存缓存大小为16M。当缓存大小超过这个值的时候，就会根据某种方式移除某些对象。子类需要提供移除某些对象的策略。</bitmap></p>
+<p>FIFOLimitedMemoryCache每次移除最先进入队列的对象，其策略如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> List&lt;Bitmap&gt; queue = Collections.synchronizedList(<span class="keyword">new</span> LinkedList&lt;Bitmap&gt;());
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function">Bitmap <span class="title">removeNext</span><span class="params">()</span> </span>{
+    <span class="function"><span class="keyword">return</span> queue.<span class="title">remove</span><span class="params">(<span class="number">0</span>)</span></span>;
+}
+</code></pre><p>UsingFreqLimitedMemoryCache每次移除使用率最小那个对象，其实现如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Bitmap, <span class="type">Integer</span>&gt; usingCounts = Collections.synchronizedMap(new HashMap&lt;Bitmap, <span class="type">Integer</span>&gt;());
+
+@Override
+<span class="keyword">protected</span> Bitmap removeNext() {
+    <span class="type">Integer</span> minUsageCount = null;
+    Bitmap leastUsedValue = null;
+    Set&lt;<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt;&gt; entries = usingCounts.entrySet();
+    synchronized (usingCounts) {
+        for (<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt; <span class="built_in">entry</span> : entries) {
+            <span class="keyword">if</span> (leastUsedValue == null) {
+                leastUsedValue = <span class="built_in">entry</span>.getKey();
+                minUsageCount = <span class="built_in">entry</span>.getValue();
+            } <span class="keyword">else</span> {
+                <span class="type">Integer</span> lastValueUsage = <span class="built_in">entry</span>.getValue();
+                <span class="keyword">if</span> (lastValueUsage &lt; minUsageCount) {
+                    minUsageCount = lastValueUsage;
+                    leastUsedValue = <span class="built_in">entry</span>.getKey();
+                }
+            }
+        }
+    }
+    usingCounts.remove(leastUsedValue);
+    <span class="keyword">return</span> leastUsedValue;
+}
+</code></pre><p>用户每次调用get(String key)方法时，相对于的对象的使用频率加1。</p>
+<p>LargestLimitedMemoryCache每次都会移除内存占用最大的那个对象，其实现如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Bitmap, <span class="type">Integer</span>&gt; valueSizes = Collections.synchronizedMap(new HashMap&lt;Bitmap, <span class="type">Integer</span>&gt;());
+
+@Override
+<span class="keyword">protected</span> Bitmap removeNext() {
+    <span class="type">Integer</span> maxSize = null;
+    Bitmap largestValue = null;
+    Set&lt;<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt;&gt; entries = valueSizes.entrySet();
+    synchronized (valueSizes) {
+        for (<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt; <span class="built_in">entry</span> : entries) {
+            <span class="keyword">if</span> (largestValue == null) {
+                largestValue = <span class="built_in">entry</span>.getKey();
+                maxSize = <span class="built_in">entry</span>.getValue();
+            } <span class="keyword">else</span> {
+                <span class="type">Integer</span> <span class="built_in">size</span> = <span class="built_in">entry</span>.getValue();
+                <span class="keyword">if</span> (<span class="built_in">size</span> &gt; maxSize) {
+                    maxSize = <span class="built_in">size</span>;
+                    largestValue = <span class="built_in">entry</span>.getKey();
+                }
+            }
+        }
+    }
+    valueSizes.remove(largestValue);
+    <span class="keyword">return</span> largestValue;
+}
+</code></pre><p>LRULimitedMemoryCache每次移除最近使用次数最少的那个（及LRU算法），其实现如下：</p>
+<pre><code><span class="label">private</span> final <span class="preprocessor">Map</span>&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt; </span>lruCache = Collections.synchronizedMap(new LinkedHashMap&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt;(INITIAL_CAPACITY, </span>LOAD_FACTOR, true))<span class="comment">;</span>
+
+<span class="comment">@Override</span>
+<span class="label">protected</span> <span class="keyword">Bitmap </span>removeNext() {
+    <span class="keyword">Bitmap </span>mostLongUsedValue = null<span class="comment">;</span>
+    synchronized (lruCache) {
+        <span class="keyword">Iterator&lt;Entry&lt;String, </span><span class="keyword">Bitmap&gt;&gt; </span><span class="keyword">it </span>= lruCache.entrySet().<span class="keyword">iterator();
+</span>        <span class="preprocessor">if</span> (<span class="keyword">it.hasNext()) </span>{
+            <span class="preprocessor">Entry</span>&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt; </span><span class="preprocessor">entry</span> = <span class="keyword">it.next();
+</span>            mostLongUsedValue = <span class="preprocessor">entry</span>.getValue()<span class="comment">;</span>
+            <span class="keyword">it.remove();
+</span>        }
+    }
+    return mostLongUsedValue<span class="comment">;</span>
+}
+</code></pre><p>接下来，我们将学习可以由用户设定内存缓存空间大小的缓存策略，框架目前只提供了LruMemoryCache实现，其内部实现原理跟LRULimitedMemoryCache一样，都是通过LinkedHashMap实现的，我们在此就不做过多讲解了。</p>
+<p>最后，让我们来看一下没有内存大小限定的缓存策略，框架目前只提供了WeakMemroyCache实现，其内部实现原理就是为每个对象建立一个软引用，这样系统GC可以随时根据需要消耗对象。</p>
+<pre><code>@<span class="function">Override
+<span class="keyword">protected</span> Reference&lt;Bitmap&gt; <span class="title">createReference</span>(<span class="params">Bitmap <span class="keyword">value</span></span>) </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> WeakReference&lt;Bitmap&gt;(<span class="keyword">value</span>);
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/01/03/Android-UniversalImageLoader-MemoryCache/" data-id="cik95uvzy002508px9a6sfsi4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android-Settings类初识" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/25/Android-Settings类初识/" class="article-date">
@@ -125,7 +309,7 @@ Settings<span class="class">.System</span><span class="class">.getString</span>(
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="ciil5eccj0023dgpx9ju6il68" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="cik95uw01002b08pxn0fexhz6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Settings/">Android Settings</a></li></ul>
@@ -165,7 +349,7 @@ Settings<span class="class">.System</span><span class="class">.getString</span>(
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/22/Android-plugin-for-gradle/" data-id="ciil5eccf001zdgpxotpi4hpa" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/22/Android-plugin-for-gradle/" data-id="cik95uvzw002408pxsikwx893" class="article-share-link">Share</a>
       
       
     </footer>
@@ -220,7 +404,7 @@ Person person=mClass.newInstance();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="ciil5ecc8001ndgpxbxpg4w8j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="cik95uvzn001s08pxd9tifs1g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Class/">Java Class</a></li></ul>
@@ -529,7 +713,7 @@ Person person=mClass.newInstance();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="ciil5eccc001tdgpxrvz7ejlz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="cik95uvzs001y08px5ms6adbz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a></li></ul>
@@ -609,7 +793,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="ciil5eccd001wdgpxaw54e8md" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="cik95uvzu002108pxufrwoyu4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a></li></ul>
@@ -648,7 +832,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="ciil5ec6u0003dgpx6kudss4y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cik95uvsg000308pxxgqzm4qs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
@@ -730,7 +914,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="ciil5ecb2000gdgpxgkrwdm3d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="cik95uvsv000i08pxwp181ggy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Servlet/">Servlet</a></li></ul>
@@ -778,201 +962,10 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="ciil5ecca001qdgpxx9knqbl3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="cik95uvzp001v08px58xee1ip" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CGI/">CGI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/11/02/Java泛型学习/" class="article-date">
-  <time datetime="2015-11-02T02:34:13.000Z" itemprop="datePublished">2015-11-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>java 泛型中? super T和? extends T的区别:</p>
-<p>经常发现有List&lt;? super T&gt;、Set&lt;? extends T&gt;的声明，是什么意思？&lt;? super T&gt;表示包括T在内的任何T的父类，&lt;? extends T&gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。</p>
-<p><strong>extends</strong></p>
-<p>List&lt;? extends Number&gt; foo3的通配符声明，意味着以下的赋值是合法的：</p>
-<pre><code><span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Number&gt;();
-<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Integer&gt;();
-<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Double&gt;();
-</code></pre><ul>
-<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你可以读取到Number，因为以上的列表要么包含Number元素，要么包含Number的子元素。你不能保证读取到Integer，因为foo3可能指向的是List<double>。你不能保证读取到Double，因为foo3可能指向的是List<integer>.</integer></double></li>
-<li>写入操作 通过以上的赋值语句，你能把一个什么类型的元素合法地插入到foo3中呢？你不能插入一个Integer元素，因为foo3可能指向List<double>。你不能插入一个Double元素，因为foo3可能指向List<integer>。你不能插入一个Number元素，因为foo3可能指向List<integer>。你不能忘List&lt;? extends T&gt;中插入任何类型的对象，因为你不能保证列表实际指向的类型是什么，你并不能保证列表中实际存储什么类型的对象。唯一可以保证的是，你可以从中读取到T或者T的子类。</integer></integer></double></li>
-</ul>
-<p><strong>super</strong></p>
-<p>List&lt;? super Integer&gt; foo3的通配符声明，意味着以下赋值是合法的：</p>
-<pre><code><span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;<span class="built_in">Integer</span>&gt;();
-<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Number&gt;();
-<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Object&gt;();
-</code></pre><ul>
-<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你不能保证读取到Integer，因为foo3可能指向List<number>或者List<object>。你不能保证读取到Number，因为foo3可能指向List<object>。唯一可以保证的是，你可以读取到Object或者Object子类的对象。</object></object></number></li>
-<li>写入操作 通过以上给定的赋值语句，你能把什么类型的元素合法地插入到foo3中呢？你可以插入Integer对象，因为上述声明的列表都支持Integer。你可以插入Integer的子类的对象，因为Integer的子类同时也是Integer，原因同上。你不能插入Double对象，因为foo3可能指向ArrayList<integer>。你不能插入Number对象或者Object对象，因为foo3可能指向ArrayList<integer>。</integer></integer></li>
-</ul>
-<p><strong>PECS</strong></p>
-<p>请记住PECS原则：生产者（Producer）使用extends，消费者（Consumer）使用super。</p>
-<p>如果你需要一个列表提供T类型的元素（即你想从列表中读取T类型的元素），你需要把这个列表声明成&lt;? extends T&gt;，因此你不能往该列表中添加任何元素。</p>
-<p>如果需要一个列表存储T类型的元素（即你想把T类型的元素加入到列表中），你需要把这个列表声明成&lt;? super T&gt;，因此你不能保证从中读取到的元素的类型。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="ciil5ecb9000ldgpx1krrq4n8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-编程技巧-对象池" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/29/编程技巧-对象池/" class="article-date">
-  <time datetime="2015-10-29T06:14:49.000Z" itemprop="datePublished">2015-10-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/29/编程技巧-对象池/">编程技巧-对象池</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>为什么要使用对象池？</strong></p>
-<p>恰当的使用对象池技术，可以有效地减少对象生成和初始化的消耗，提高系统的运行效率。</p>
-<p><strong>对象池思路</strong></p>
-<p>将用过的对象保存起来，等下一次需要的这种对象的时候，再拿出来重复使用，从而在一定程度上减少频繁创建对象所造成的开销。用于充当保存对象的“容器”的对象，被称为“对象池”（Object Pool，或简称Pool）</p>
-<p>对于没有状态的对象，在重复使用之前，无需进行任何处理；对于有状态的对象，在重复使用之前，就需要把它们回复到等同于刚刚生成的状态。</p>
-<p>并非所有的对象都适合拿来池化，因为维护对象池也要造成一定开销。对生成时开销不大的对象进行池化，反而可能会出现维护对象池的开销大于生成新对象的开销，从而使性能降低的情况。但是对于生成时开销可观的对象，池化技术就是提高性能的有效策略了。例如：线程池</p>
-<p>下面是我总结的两种创建对象池的方法：</p>
-<p><strong>链表思想</strong></p>
-<p>下面实现了一个在链表头进行插入和删除操作的对象池的例子。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SomeObject</span> </span>{
-<span class="comment">//属性</span>
-
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_POOL_SIZE=<span class="number">50</span>; 
-    <span class="keyword">private</span> <span class="keyword">static</span> SomeObject sPool;
-    <span class="keyword">private</span> SomeObject next;
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> sPoolSize=<span class="number">0</span>;
-
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object sPoolSync=<span class="keyword">new</span> Object();
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SomeObject <span class="title">obtain</span><span class="params">()</span></span>{
-        <span class="keyword">synchronized</span> (sPoolSync) {
-            <span class="keyword">if</span>(sPool!=<span class="keyword">null</span>){
-                SomeObject obj=sPool;
-                sPool=obj.next;
-                obj.next=<span class="keyword">null</span>;
-                sPoolSize--;
-                <span class="keyword">return</span> obj;
-            }
-        }
-        <span class="keyword">return</span> <span class="keyword">new</span> SomeObject();
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SomeObject <span class="title">obtain</span><span class="params">(SomeObject orig)</span></span>{
-        SomeObject obj=obtain();
-        <span class="comment">//对象属性值复制</span>
-        <span class="keyword">return</span> obj;
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recycle</span><span class="params">()</span></span>{
-        clearForRecycle();
-        <span class="keyword">synchronized</span> (sPoolSync) {
-            <span class="keyword">if</span>(sPoolSize&lt;MAX_POOL_SIZE){
-                next=sPool;
-                sPool=<span class="keyword">this</span>;
-                sPoolSize++;
-            }
-        }
-    }
-
-    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">clearForRecycle</span><span class="params">()</span></span>{
-        <span class="comment">//重置属性</span>
-    }
-
-}
-</code></pre><p><strong>通过ArrayList实现</strong></p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PendingPost</span> {
-    <span class="keyword">private</span> final <span class="keyword">static</span> List&lt;PendingPost&gt; pendingPostPool = <span class="keyword">new</span> ArrayList&lt;PendingPost&gt;();
-
-    Object <span class="keyword">event</span>;
-    Subscription subscription;
-
-    <span class="function"><span class="keyword">private</span> <span class="title">PendingPost</span>(<span class="params">Object <span class="keyword">event</span>, Subscription subscription</span>) </span>{
-        <span class="keyword">this</span>.<span class="keyword">event</span> = <span class="keyword">event</span>;
-        <span class="keyword">this</span>.subscription = subscription;
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PendingPost <span class="title">obtainPendingPost</span>(<span class="params">Subscription subscription, Object <span class="keyword">event</span></span>) </span>{
-        synchronized (pendingPostPool) {
-            <span class="keyword">int</span> size = pendingPostPool.size();
-            <span class="keyword">if</span> (size &gt; <span class="number">0</span>) {
-                PendingPost pendingPost = pendingPostPool.remove(size - <span class="number">1</span>);
-                pendingPost.<span class="keyword">event</span> = <span class="keyword">event</span>;
-                pendingPost.subscription = subscription;
-                <span class="keyword">return</span> pendingPost;
-            }
-        }
-        <span class="keyword">return</span> <span class="keyword">new</span> PendingPost(<span class="keyword">event</span>, subscription);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">releasePendingPost</span>(<span class="params">PendingPost pendingPost</span>) </span>{
-        pendingPost.<span class="keyword">event</span> = <span class="keyword">null</span>;
-        pendingPost.subscription = <span class="keyword">null</span>;
-        synchronized (pendingPostPool) {
-            <span class="comment">// Don't let the pool grow indefinitely</span>
-            <span class="keyword">if</span> (pendingPostPool.size() &lt; <span class="number">10000</span>) {
-                pendingPostPool.add(pendingPost);
-            }
-        }
-    }
-
-}
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="ciil5ecai0009dgpxhn8ajolp" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a></li></ul>
 
     </footer>
   </div>
@@ -996,7 +989,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1005,7 +998,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -1014,7 +1007,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -1026,6 +1019,14 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       <ul>
         
           <li>
+            <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
+          </li>
+        
+          <li>
+            <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
             <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
           </li>
         
@@ -1035,14 +1036,6 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
         
           <li>
             <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
           </li>
         
       </ul>
@@ -1057,7 +1050,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 crazymongo<br>
+      &copy; 2016 crazymongo<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

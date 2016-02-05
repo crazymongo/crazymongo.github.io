@@ -61,6 +61,197 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/02/Java泛型学习/" class="article-date">
+  <time datetime="2015-11-02T02:34:13.000Z" itemprop="datePublished">2015-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>java 泛型中? super T和? extends T的区别:</p>
+<p>经常发现有List&lt;? super T&gt;、Set&lt;? extends T&gt;的声明，是什么意思？&lt;? super T&gt;表示包括T在内的任何T的父类，&lt;? extends T&gt;表示包括T在内的任何T的子类。下面让我们详细分析一下这两种通配符具体的区别。</p>
+<p><strong>extends</strong></p>
+<p>List&lt;? extends Number&gt; foo3的通配符声明，意味着以下的赋值是合法的：</p>
+<pre><code><span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Number&gt;();
+<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Integer&gt;();
+<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; foo3=<span class="keyword">new</span> ArrayList&lt;? <span class="keyword">extends</span> Double&gt;();
+</code></pre><ul>
+<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你可以读取到Number，因为以上的列表要么包含Number元素，要么包含Number的子元素。你不能保证读取到Integer，因为foo3可能指向的是List<double>。你不能保证读取到Double，因为foo3可能指向的是List<integer>.</integer></double></li>
+<li>写入操作 通过以上的赋值语句，你能把一个什么类型的元素合法地插入到foo3中呢？你不能插入一个Integer元素，因为foo3可能指向List<double>。你不能插入一个Double元素，因为foo3可能指向List<integer>。你不能插入一个Number元素，因为foo3可能指向List<integer>。你不能忘List&lt;? extends T&gt;中插入任何类型的对象，因为你不能保证列表实际指向的类型是什么，你并不能保证列表中实际存储什么类型的对象。唯一可以保证的是，你可以从中读取到T或者T的子类。</integer></integer></double></li>
+</ul>
+<p><strong>super</strong></p>
+<p>List&lt;? super Integer&gt; foo3的通配符声明，意味着以下赋值是合法的：</p>
+<pre><code><span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;<span class="built_in">Integer</span>&gt;();
+<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Number&gt;();
+<span class="built_in">List</span>&lt;? supter <span class="built_in">Integer</span>&gt; foo3=<span class="literal">new</span> ArrayList&lt;Object&gt;();
+</code></pre><ul>
+<li>读取操作 通过以上给定的赋值语句，你一定能从foo3列表中读取到的元素的类型是什么呢？你不能保证读取到Integer，因为foo3可能指向List<number>或者List<object>。你不能保证读取到Number，因为foo3可能指向List<object>。唯一可以保证的是，你可以读取到Object或者Object子类的对象。</object></object></number></li>
+<li>写入操作 通过以上给定的赋值语句，你能把什么类型的元素合法地插入到foo3中呢？你可以插入Integer对象，因为上述声明的列表都支持Integer。你可以插入Integer的子类的对象，因为Integer的子类同时也是Integer，原因同上。你不能插入Double对象，因为foo3可能指向ArrayList<integer>。你不能插入Number对象或者Object对象，因为foo3可能指向ArrayList<integer>。</integer></integer></li>
+</ul>
+<p><strong>PECS</strong></p>
+<p>请记住PECS原则：生产者（Producer）使用extends，消费者（Consumer）使用super。</p>
+<p>如果你需要一个列表提供T类型的元素（即你想从列表中读取T类型的元素），你需要把这个列表声明成&lt;? extends T&gt;，因此你不能往该列表中添加任何元素。</p>
+<p>如果需要一个列表存储T类型的元素（即你想把T类型的元素加入到列表中），你需要把这个列表声明成&lt;? super T&gt;，因此你不能保证从中读取到的元素的类型。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cik95uvt3000n08pxprswq6tr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-编程技巧-对象池" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/29/编程技巧-对象池/" class="article-date">
+  <time datetime="2015-10-29T06:14:49.000Z" itemprop="datePublished">2015-10-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/29/编程技巧-对象池/">编程技巧-对象池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>为什么要使用对象池？</strong></p>
+<p>恰当的使用对象池技术，可以有效地减少对象生成和初始化的消耗，提高系统的运行效率。</p>
+<p><strong>对象池思路</strong></p>
+<p>将用过的对象保存起来，等下一次需要的这种对象的时候，再拿出来重复使用，从而在一定程度上减少频繁创建对象所造成的开销。用于充当保存对象的“容器”的对象，被称为“对象池”（Object Pool，或简称Pool）</p>
+<p>对于没有状态的对象，在重复使用之前，无需进行任何处理；对于有状态的对象，在重复使用之前，就需要把它们回复到等同于刚刚生成的状态。</p>
+<p>并非所有的对象都适合拿来池化，因为维护对象池也要造成一定开销。对生成时开销不大的对象进行池化，反而可能会出现维护对象池的开销大于生成新对象的开销，从而使性能降低的情况。但是对于生成时开销可观的对象，池化技术就是提高性能的有效策略了。例如：线程池</p>
+<p>下面是我总结的两种创建对象池的方法：</p>
+<p><strong>链表思想</strong></p>
+<p>下面实现了一个在链表头进行插入和删除操作的对象池的例子。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SomeObject</span> </span>{
+<span class="comment">//属性</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_POOL_SIZE=<span class="number">50</span>; 
+    <span class="keyword">private</span> <span class="keyword">static</span> SomeObject sPool;
+    <span class="keyword">private</span> SomeObject next;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> sPoolSize=<span class="number">0</span>;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object sPoolSync=<span class="keyword">new</span> Object();
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SomeObject <span class="title">obtain</span><span class="params">()</span></span>{
+        <span class="keyword">synchronized</span> (sPoolSync) {
+            <span class="keyword">if</span>(sPool!=<span class="keyword">null</span>){
+                SomeObject obj=sPool;
+                sPool=obj.next;
+                obj.next=<span class="keyword">null</span>;
+                sPoolSize--;
+                <span class="keyword">return</span> obj;
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> SomeObject();
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SomeObject <span class="title">obtain</span><span class="params">(SomeObject orig)</span></span>{
+        SomeObject obj=obtain();
+        <span class="comment">//对象属性值复制</span>
+        <span class="keyword">return</span> obj;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recycle</span><span class="params">()</span></span>{
+        clearForRecycle();
+        <span class="keyword">synchronized</span> (sPoolSync) {
+            <span class="keyword">if</span>(sPoolSize&lt;MAX_POOL_SIZE){
+                next=sPool;
+                sPool=<span class="keyword">this</span>;
+                sPoolSize++;
+            }
+        }
+    }
+
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">clearForRecycle</span><span class="params">()</span></span>{
+        <span class="comment">//重置属性</span>
+    }
+
+}
+</code></pre><p><strong>通过ArrayList实现</strong></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PendingPost</span> {
+    <span class="keyword">private</span> final <span class="keyword">static</span> List&lt;PendingPost&gt; pendingPostPool = <span class="keyword">new</span> ArrayList&lt;PendingPost&gt;();
+
+    Object <span class="keyword">event</span>;
+    Subscription subscription;
+
+    <span class="function"><span class="keyword">private</span> <span class="title">PendingPost</span>(<span class="params">Object <span class="keyword">event</span>, Subscription subscription</span>) </span>{
+        <span class="keyword">this</span>.<span class="keyword">event</span> = <span class="keyword">event</span>;
+        <span class="keyword">this</span>.subscription = subscription;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PendingPost <span class="title">obtainPendingPost</span>(<span class="params">Subscription subscription, Object <span class="keyword">event</span></span>) </span>{
+        synchronized (pendingPostPool) {
+            <span class="keyword">int</span> size = pendingPostPool.size();
+            <span class="keyword">if</span> (size &gt; <span class="number">0</span>) {
+                PendingPost pendingPost = pendingPostPool.remove(size - <span class="number">1</span>);
+                pendingPost.<span class="keyword">event</span> = <span class="keyword">event</span>;
+                pendingPost.subscription = subscription;
+                <span class="keyword">return</span> pendingPost;
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> PendingPost(<span class="keyword">event</span>, subscription);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">releasePendingPost</span>(<span class="params">PendingPost pendingPost</span>) </span>{
+        pendingPost.<span class="keyword">event</span> = <span class="keyword">null</span>;
+        pendingPost.subscription = <span class="keyword">null</span>;
+        synchronized (pendingPostPool) {
+            <span class="comment">// Don't let the pool grow indefinitely</span>
+            <span class="keyword">if</span> (pendingPostPool.size() &lt; <span class="number">10000</span>) {
+                pendingPostPool.add(pendingPost);
+            }
+        }
+    }
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cik95uvsm000908px5wpe6ha4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-EventBus学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/29/EventBus学习笔记/" class="article-date">
@@ -124,7 +315,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="ciil5ecc6001kdgpxoaoosfjr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cik95uvzl001p08px3hgnjs27" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-EventBus/">android EventBus</a></li></ul>
@@ -174,7 +365,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="ciil5ecbm000pdgpxughb7add" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cik95uvtm000r08pxyfi31b20" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Future/">Java Future</a></li></ul>
@@ -214,7 +405,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="ciil5ecbz001adgpxs7ov9b00" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cik95uvz9001c08pxwkuy0ahd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Callable/">Java Callable</a></li></ul>
@@ -255,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="ciil5ecbr000vdgpxw3bdt6rl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="cik95uvyo000x08pxhml1ezsx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a></li></ul>
@@ -352,7 +543,7 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="ciil5ecbs000ydgpxh6d9s1lz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="cik95uvyr001008pxcl5h2d4s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Executor/">Java Executor</a></li></ul>
@@ -417,7 +608,7 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="ciil5ecay000cdgpxqzeh57th" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="cik95uvsp000c08pxz4yr540w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-线程池/">java 线程池</a></li></ul>
@@ -464,7 +655,7 @@ public void close() throws IOException {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/15/Java-ByteArrayOutputStream/" data-id="ciil5ecc1001ddgpx4jwx9qca" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/15/Java-ByteArrayOutputStream/" data-id="cik95uvzc001f08px250nj26t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a></li></ul>
@@ -504,116 +695,10 @@ public void close() throws IOException {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-FilterOutputStream/" data-id="ciil5ecbp000sdgpxovlumk3n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/13/Java-FilterOutputStream/" data-id="cik95uvyk000u08px5b7jcra5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-Closeable-Flushable" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/13/Java-Closeable-Flushable/" class="article-date">
-  <time datetime="2015-10-13T07:53:35.000Z" itemprop="datePublished">2015-10-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/13/Java-Closeable-Flushable/">Java-Closeable-Flushable</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>接口Flushable是可刷新数据的目标地。调用flush方法将所有已缓冲数据输出写入底层流。其定义如下：</p>
-<pre><code>public interface Flushable {
-
-    /<span class="keyword">*</span><span class="keyword">*</span>
-     <span class="keyword">*</span> Flushes this stream by writing any buffered output to the underlying
-     <span class="keyword">*</span> stream.
-     <span class="keyword">*</span>
-     <span class="keyword">*</span> <span class="comment">@throws IOException If an I/O error occurs</span>
-     <span class="keyword">*</span>/
-    void flush() throws IOException;
-}
-</code></pre><p>接口Closeable是可以关闭的数据源或目标。调用close方法可释放对象保存的资源。定义如下：</p>
-<pre><code>public interface Closeable extends AutoCloseable {
-
-/<span class="keyword">*</span><span class="keyword">*</span>
- <span class="keyword">*</span> Closes this stream and releases any system resources associated
- <span class="keyword">*</span> with it. If the stream is already closed then invoking this
- <span class="keyword">*</span> method has no effect.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span> As noted in {<span class="comment">@link AutoCloseable#close()}, cases where the</span>
- <span class="keyword">*</span> close may fail require careful attention. It is strongly advised
- <span class="keyword">*</span> to relinquish the underlying resources and to internally
- <span class="keyword">*</span> <span class="variable">&lt;em&gt;</span>mark<span class="variable">&lt;/em&gt;</span> the {<span class="comment">@code Closeable} as closed, prior to throwing</span>
- <span class="keyword">*</span> the {<span class="comment">@code IOException}.</span>
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="comment">@throws IOException if an I/O error occurs</span>
- <span class="keyword">*</span>/
-public void close() throws IOException;
-</code></pre><p>}</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-Closeable-Flushable/" data-id="ciil5ecby0017dgpxn1glmth4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-DataOutput" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/13/Java-DataOutput/" class="article-date">
-  <time datetime="2015-10-13T06:42:34.000Z" itemprop="datePublished">2015-10-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/13/Java-DataOutput/">Java-DataOutput</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>DataOutput接口用于将Java基本类型转化为一系列字节，并将这些字节写入二进制流。同时还提供了一个将String转换成UTF-8修改版格式并写入所得到的系列字节的工具。对应此接口中写入的所有方法，如果由于某种原因无法写入某个字节，则抛出IOException。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-DataOutput/" data-id="ciil5ecbu0011dgpxl5uk04xr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a></li></ul>
 
     </footer>
   </div>
@@ -637,7 +722,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -646,7 +731,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -655,7 +740,7 @@ public void close() throws IOException;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -667,6 +752,14 @@ public void close() throws IOException;
       <ul>
         
           <li>
+            <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
+          </li>
+        
+          <li>
+            <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
             <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
           </li>
         
@@ -676,14 +769,6 @@ public void close() throws IOException;
         
           <li>
             <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
           </li>
         
       </ul>
@@ -698,7 +783,7 @@ public void close() throws IOException;
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 crazymongo<br>
+      &copy; 2016 crazymongo<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

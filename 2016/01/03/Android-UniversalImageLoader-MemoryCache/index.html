@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android-UniversalImageLoader-MemoryCache | crazymongo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="UniversalImageLoader提供多种内存缓存策略，大致分为三类：
+
+内存缓存大小固定的内存缓存策略
+可以由用户设定内存缓存空间大小的缓存策略
+没有内存大小限定的缓存策略
+
+首先，我们先来学习一下内存缓存大小固定的内存缓存策略，其中框架提供了多种实现，包括：FIFOLimitedMemoryCache, LargestLimitedMemoryCache, UsingFreqLimite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-UniversalImageLoader-MemoryCache">
+<meta property="og:url" content="http://yoursite.com/2016/01/03/Android-UniversalImageLoader-MemoryCache/index.html">
+<meta property="og:site_name" content="crazymongo">
+<meta property="og:description" content="UniversalImageLoader提供多种内存缓存策略，大致分为三类：
+
+内存缓存大小固定的内存缓存策略
+可以由用户设定内存缓存空间大小的缓存策略
+没有内存大小限定的缓存策略
+
+首先，我们先来学习一下内存缓存大小固定的内存缓存策略，其中框架提供了多种实现，包括：FIFOLimitedMemoryCache, LargestLimitedMemoryCache, UsingFreqLimite">
+<meta property="og:updated_time" content="2016-01-03T11:21:37.941Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-UniversalImageLoader-MemoryCache">
+<meta name="twitter:description" content="UniversalImageLoader提供多种内存缓存策略，大致分为三类：
+
+内存缓存大小固定的内存缓存策略
+可以由用户设定内存缓存空间大小的缓存策略
+没有内存大小限定的缓存策略
+
+首先，我们先来学习一下内存缓存大小固定的内存缓存策略，其中框架提供了多种实现，包括：FIFOLimitedMemoryCache, LargestLimitedMemoryCache, UsingFreqLimite">
+  
+    <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">crazymongo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-UniversalImageLoader-MemoryCache" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/" class="article-date">
+  <time datetime="2016-01-03T11:21:37.000Z" itemprop="datePublished">2016-01-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android-UniversalImageLoader-MemoryCache
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UniversalImageLoader提供多种内存缓存策略，大致分为三类：</p>
+<ul>
+<li>内存缓存大小固定的内存缓存策略</li>
+<li>可以由用户设定内存缓存空间大小的缓存策略</li>
+<li>没有内存大小限定的缓存策略</li>
+</ul>
+<p>首先，我们先来学习一下内存缓存大小固定的内存缓存策略，其中框架提供了多种实现，包括：FIFOLimitedMemoryCache, LargestLimitedMemoryCache, UsingFreqLimitedMemoryCache, LRULimitedMemoryCache。这几个类都继承了抽象类LimitedMemoryCache。而LimitedMemoryCache派生自BaseMemoryCache。</p>
+<p>抽象类BaseMemoryCache基本实现了对象的软缓存，其内部通过HashMap<string, reference<bitmap="">&gt;())的对象来保存对象引用。</string,></p>
+<p>抽象类LimitedMemoryCache基本实现了对象的硬缓存，其内部通过LinkedList<bitmap>的对象来保存对象引用。该类规定了最大的内存缓存大小为16M。当缓存大小超过这个值的时候，就会根据某种方式移除某些对象。子类需要提供移除某些对象的策略。</bitmap></p>
+<p>FIFOLimitedMemoryCache每次移除最先进入队列的对象，其策略如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> List&lt;Bitmap&gt; queue = Collections.synchronizedList(<span class="keyword">new</span> LinkedList&lt;Bitmap&gt;());
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function">Bitmap <span class="title">removeNext</span><span class="params">()</span> </span>{
+    <span class="function"><span class="keyword">return</span> queue.<span class="title">remove</span><span class="params">(<span class="number">0</span>)</span></span>;
+}
+</code></pre><p>UsingFreqLimitedMemoryCache每次移除使用率最小那个对象，其实现如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Bitmap, <span class="type">Integer</span>&gt; usingCounts = Collections.synchronizedMap(new HashMap&lt;Bitmap, <span class="type">Integer</span>&gt;());
+
+@Override
+<span class="keyword">protected</span> Bitmap removeNext() {
+    <span class="type">Integer</span> minUsageCount = null;
+    Bitmap leastUsedValue = null;
+    Set&lt;<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt;&gt; entries = usingCounts.entrySet();
+    synchronized (usingCounts) {
+        for (<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt; <span class="built_in">entry</span> : entries) {
+            <span class="keyword">if</span> (leastUsedValue == null) {
+                leastUsedValue = <span class="built_in">entry</span>.getKey();
+                minUsageCount = <span class="built_in">entry</span>.getValue();
+            } <span class="keyword">else</span> {
+                <span class="type">Integer</span> lastValueUsage = <span class="built_in">entry</span>.getValue();
+                <span class="keyword">if</span> (lastValueUsage &lt; minUsageCount) {
+                    minUsageCount = lastValueUsage;
+                    leastUsedValue = <span class="built_in">entry</span>.getKey();
+                }
+            }
+        }
+    }
+    usingCounts.remove(leastUsedValue);
+    <span class="keyword">return</span> leastUsedValue;
+}
+</code></pre><p>用户每次调用get(String key)方法时，相对于的对象的使用频率加1。</p>
+<p>LargestLimitedMemoryCache每次都会移除内存占用最大的那个对象，其实现如下：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Bitmap, <span class="type">Integer</span>&gt; valueSizes = Collections.synchronizedMap(new HashMap&lt;Bitmap, <span class="type">Integer</span>&gt;());
+
+@Override
+<span class="keyword">protected</span> Bitmap removeNext() {
+    <span class="type">Integer</span> maxSize = null;
+    Bitmap largestValue = null;
+    Set&lt;<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt;&gt; entries = valueSizes.entrySet();
+    synchronized (valueSizes) {
+        for (<span class="built_in">Entry</span>&lt;Bitmap, <span class="type">Integer</span>&gt; <span class="built_in">entry</span> : entries) {
+            <span class="keyword">if</span> (largestValue == null) {
+                largestValue = <span class="built_in">entry</span>.getKey();
+                maxSize = <span class="built_in">entry</span>.getValue();
+            } <span class="keyword">else</span> {
+                <span class="type">Integer</span> <span class="built_in">size</span> = <span class="built_in">entry</span>.getValue();
+                <span class="keyword">if</span> (<span class="built_in">size</span> &gt; maxSize) {
+                    maxSize = <span class="built_in">size</span>;
+                    largestValue = <span class="built_in">entry</span>.getKey();
+                }
+            }
+        }
+    }
+    valueSizes.remove(largestValue);
+    <span class="keyword">return</span> largestValue;
+}
+</code></pre><p>LRULimitedMemoryCache每次移除最近使用次数最少的那个（及LRU算法），其实现如下：</p>
+<pre><code><span class="label">private</span> final <span class="preprocessor">Map</span>&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt; </span>lruCache = Collections.synchronizedMap(new LinkedHashMap&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt;(INITIAL_CAPACITY, </span>LOAD_FACTOR, true))<span class="comment">;</span>
+
+<span class="comment">@Override</span>
+<span class="label">protected</span> <span class="keyword">Bitmap </span>removeNext() {
+    <span class="keyword">Bitmap </span>mostLongUsedValue = null<span class="comment">;</span>
+    synchronized (lruCache) {
+        <span class="keyword">Iterator&lt;Entry&lt;String, </span><span class="keyword">Bitmap&gt;&gt; </span><span class="keyword">it </span>= lruCache.entrySet().<span class="keyword">iterator();
+</span>        <span class="preprocessor">if</span> (<span class="keyword">it.hasNext()) </span>{
+            <span class="preprocessor">Entry</span>&lt;<span class="keyword">String, </span><span class="keyword">Bitmap&gt; </span><span class="preprocessor">entry</span> = <span class="keyword">it.next();
+</span>            mostLongUsedValue = <span class="preprocessor">entry</span>.getValue()<span class="comment">;</span>
+            <span class="keyword">it.remove();
+</span>        }
+    }
+    return mostLongUsedValue<span class="comment">;</span>
+}
+</code></pre><p>接下来，我们将学习可以由用户设定内存缓存空间大小的缓存策略，框架目前只提供了LruMemoryCache实现，其内部实现原理跟LRULimitedMemoryCache一样，都是通过LinkedHashMap实现的，我们在此就不做过多讲解了。</p>
+<p>最后，让我们来看一下没有内存大小限定的缓存策略，框架目前只提供了WeakMemroyCache实现，其内部实现原理就是为每个对象建立一个软引用，这样系统GC可以随时根据需要消耗对象。</p>
+<pre><code>@<span class="function">Override
+<span class="keyword">protected</span> Reference&lt;Bitmap&gt; <span class="title">createReference</span>(<span class="params">Bitmap <span class="keyword">value</span></span>) </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> WeakReference&lt;Bitmap&gt;(<span class="keyword">value</span>);
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/01/03/Android-UniversalImageLoader-MemoryCache/" data-id="cik95uvzy002508px9a6sfsi4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/13/HashSet和HashMap/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HashSet、HashMap和Hashtable
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/12/25/Android-Settings类初识/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android-Settings类初识</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
+          </li>
+        
+          <li>
+            <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 crazymongo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>HashSet、HashMap和Hashtable | crazymongo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="HashSet
+HashSet实现了Set接口，内部由哈希表（实际上是HashMap实例）支持。HashSet不保证集合的迭代顺序，特别是它不保证该顺序恒久不变。HashSet允许null元素。
+HashSet是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashSet、HashMap和Hashtable">
+<meta property="og:url" content="http://yoursite.com/2016/01/13/HashSet和HashMap/index.html">
+<meta property="og:site_name" content="crazymongo">
+<meta property="og:description" content="HashSet
+HashSet实现了Set接口，内部由哈希表（实际上是HashMap实例）支持。HashSet不保证集合的迭代顺序，特别是它不保证该顺序恒久不变。HashSet允许null元素。
+HashSet是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchro">
+<meta property="og:updated_time" content="2016-01-14T03:33:02.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HashSet、HashMap和Hashtable">
+<meta name="twitter:description" content="HashSet
+HashSet实现了Set接口，内部由哈希表（实际上是HashMap实例）支持。HashSet不保证集合的迭代顺序，特别是它不保证该顺序恒久不变。HashSet允许null元素。
+HashSet是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchro">
+  
+    <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">crazymongo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-HashSet和HashMap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/13/HashSet和HashMap/" class="article-date">
+  <time datetime="2016-01-13T09:59:07.000Z" itemprop="datePublished">2016-01-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HashSet、HashMap和Hashtable
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>HashSet</strong></p>
+<p>HashSet实现了Set接口，内部由哈希表（实际上是HashMap实例）支持。HashSet不保证集合的迭代顺序，特别是它不保证该顺序恒久不变。HashSet允许null元素。</p>
+<p>HashSet是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchronizedSet(new HashSet(…))方法。</p>
+<p>通过HashSet的iterator()方法获得的迭代器是“fail-fast”：在获取迭代器之后，除了通过迭代器本身移除元素之外，其它任何对集合的修改都将导致迭代器抛出ConcurrentModificationException。因此，面对并发修改，迭代器很快就会失败，而不冒将来在某个不确定时间发生任何不确定行为的风险。</p>
+<p><strong>HashMap</strong></p>
+<p>HashMap是基于哈希表的Map接口的实现。此实现提供所有可选的映射操作，并允许null值和null键。（除了非同步和允许使用null之外，HashMap类与Hashtable大致相同）。HashMap不保证映射的顺序，特别是它不保证顺序恒久不变。</p>
+<p>有两个参数影响HashMap的性能，及初识容量和加载因子。容量是哈希表中桶的数量，初识容量只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对哈希表进行rehash操作（即重建内部数据结构），从而哈希表将具有大约两倍的容量。</p>
+<p>通常，默认加载因子（.75）在时间和空间成本上寻求一种折衷。加载因子过高虽然减少了空间开销，但同时也增加了查询成本。</p>
+<p>HashMap是非同步的，如果多个线程同时访问集合，且至少一个线程修改这个集合，那么这个集合在外部必须被同步。避免偶然地不同步访问集合发生，我们在创建set时最好使用Collections.synchronizedMap(new HashMap(…))方法。</p>
+<p>由所有此类的“collection 视图方法”所返回的迭代器都是快速失败 的：在迭代器创建之后，如果从结构上对映射进行修改，除非通过迭代器本身的 remove 方法，其他任何时间任何方式的修改，迭代器都将抛出 ConcurrentModificationException。因此，面对并发的修改，迭代器很快就会完全失败，而不冒在将来不确定的时间发生任意不确定行为的风险。</p>
+<p><strong>Hashtable</strong></p>
+<p>Hashtable实现一个哈希表，该哈希表将键映射到相应的值。任何非null对象都可以作为键或值。</p>
+<p>为了成功地在哈希表中存储和获取对象，用作键的对象必须实现hashCode方法和equals方法。</p>
+<p>Hashtable是同步的，如果程序不需要线程安全的哈希表实现，推荐使用HashMap。如果需要线程安全、高并发的哈希表实现，推荐使用ConcurrentHashMap。</p>
+<p><strong>TreeMap</strong></p>
+<p>TreeMap是基于红黑树（Red-Black tree）的NavigableMap实现。该映射根据其键的自然顺序进行排序，或者根据创建时提供的Comparator进行排序，具体取决于使用的构造方法。</p>
+<p>TreeMap为方法contrainKey、get、put和remove等操作提供受保证的log(n)时间开销。</p>
+<p><strong>TreeSet</strong></p>
+<p>TreeSet是基于TreeMap的NavigableSet实现。使用元素的自然顺序对元素进行排序，或者根据创建Set时提供的Comparator进行排序。此实现为基本操作（add、remove 和 contains）提供受保证的 log(n) 时间开销。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/01/13/HashSet和HashMap/" data-id="cik95uvzj001m08pxo1pjwgkv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android-UniversalImageLoader-MemoryCache</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
+          </li>
+        
+          <li>
+            <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 crazymongo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

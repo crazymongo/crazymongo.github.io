@@ -61,45 +61,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-闭包" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/09/闭包/" class="article-date">
-  <time datetime="2015-12-09T03:31:00.000Z" itemprop="datePublished">2015-12-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/09/闭包/">闭包</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>闭包是指可以包含自由（未绑定到特定对象）变量的代码块；这些变量不是在这个代码块内或者任何全局上下文中定义的，而是在定义代码块的环境中定义。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cimrcrluj00037omfe5c33wbm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-Servlet" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/20/Servlet/" class="article-date">
@@ -724,6 +685,71 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
 
 
   
+    <article id="post-java-线程池" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/20/java-线程池/" class="article-date">
+  <time datetime="2015-10-20T02:14:20.000Z" itemprop="datePublished">2015-10-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/20/java-线程池/">java-线程池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>线程池可以帮助程序员更好地利用多核cpu。</p>
+<p>好的软件设计不建议手动创建和销毁线程。线程的创建和销毁是非常耗CPU和内存的，因为这需要JVM和操作系统的参与。64位JVM默认线程是大小1MB。这就是为什么说在请求频繁时为每个小的请求创建线程是一种资源的浪费。线程池可以根据创建时选择的策略自动处理线程的生命周期。重点在于：在资源（如内存、CPU）充足的情况下，线程池没有明显的优势，否则没有线程池将导致服务器崩溃。有很多理由可以解释为什么没有更多的资源。例如，在拒绝服务攻击时会引起的许多线程并行执行，从而导致线程饥饿。除此之外，手动执行线程时，可能会因为异常导致线程死亡，程序员必须记得处理这种异常情况。</p>
+<p>ExecutorService是一个非常有用的工具，可以帮助我们很方便的执行所有的任务。它的好处在什么地方呢？我们不需要手动创建工作线程。一个工作线程就是ExecutorService内部使用的线程。值得注意的是，ExecutorService管理线程的生命周期。它可以在负载增加的时候增加工作线程。另一方面，在一定周期内，它可以减少空闲的线程。当我们使用线程池的时候，我们不在需要重复创建线程，我们也不需要担心一个线程执行完任务后的重复使用问题。最后，一个任务提交以后，我们可以获取一个未来结果的抽象-Future。当然，在Java8中，我们可以使用更优秀的CompletableFuture，如何将一个Future转换成CompletableFuture已超出了本文所讨论的范围。但是请记住，只有提交的任务是一个Callable时，Future才有意义，因为Callable有输出结果，而Runnable没有。</p>
+<p>每个线程池由几个模块组成：</p>
+<ul>
+<li>一个任务队列</li>
+<li>一个工作线程的集合</li>
+<li>一个线程工厂</li>
+<li>管理线程状态的元数据</li>
+</ul>
+<p>ExecutorService接口有很多实现，我们重点关注一下最常用的ThreadPoolExecutor。实际上，newCacheThreadPool()、newFixedThreadPool()和newSingleThreadExecutor()三个方法返回的都是ThreadPoolExecutor类的实例。如果要手动创建一个ThreadPoolExecutor类的实例，至少需要5个参数：</p>
+<ul>
+<li>int corePoolSize:线程池保存的线程数量</li>
+<li>int maximumPoolSize:线程的最大数量</li>
+<li>long keepAlive and TimeUnit unit:超出corePoolSize大小后，线程空闲的时间到达给定时间后将会关闭。</li>
+<li>BlockingQueue workQueue:提交的任务将被放置在该队列中等待执行。</li>
+</ul>
+<p>LinkedBlockingQueue是调用Executors类中的方法生成ThreadPoolExecutor实例时默认队列，PriorityBlockingQueue实际上也是一个BlockingQueue，不过，根据设定的优先级来处理任务也是一个棘手的问题。首先，提交一个Runnable或Callable任务，该任务被包装成一个RunnableFuture，然后添加到队列中，PriorityBlockingQueue比较每个对象来觉得执行的优先权（比较对象是包装后的RunnableFuture而不是任务的内容）。不仅如此，当corePoolSize大于1并且工作线程空闲时，ThreadPoolExecutor可能会根据插入顺序来执行，而不是PriorityBlockingQueue所期望的优先级顺序。</p>
+<p>默认情况下，ThreadPoolExecutor的工作队列（workQueue）是没有边界的。通常这是没问题的，但是请记住，没有边界的工作队列可能导致应用出现内存溢出错误。如果要限制任务队列的大小，可以设置RejectionExecutionHandler。你可以自定义处理器或者从4个已有处理器（默认AbortPolicy）中选择一个：</p>
+<ul>
+<li>CallerRunsPolicy</li>
+<li>AbortPolicy</li>
+<li>DiscardPolicy</li>
+<li>DiscardOldestPolicy</li>
+</ul>
+<p>线程工厂通常用于创建自定义的线程。例如，你可以增加自定义的Thread.UncaughExceptionHandler或者设置线程名称。</p>
+<p>JDK5诞生于2004年，提供很多有用的并发工具，ExecutorService类就是其中的一个。线程池通常应用于服务器的底层（如Tomcat和Undertow）。当然，线程池也不仅仅局限于服务器环境。在任何密集并行难题中他们都非常有用。由于现在越来越多的软件运行于多核系统上，线程池就更值得关注了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="cimrcrluu000c7omfpvx0yojg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-线程池/">java 线程池</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -757,7 +783,7 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 
@@ -777,15 +803,15 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
           </li>
         
           <li>
-            <a href="/2016/04/08/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
           </li>
         
           <li>
             <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
           </li>
         
       </ul>

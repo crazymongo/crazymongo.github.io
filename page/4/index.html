@@ -61,60 +61,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Android-Looper" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/23/Android-Looper/" class="article-date">
-  <time datetime="2015-09-23T07:17:51.000Z" itemprop="datePublished">2015-09-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/23/Android-Looper/">Android-Looper</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Looper类主要作用就是对消息队列进行轮询，从队列中取出消息，然后进行处理。缺省情况下，线程没有消息处理机制，下面是为线程添加消息处理机制的例子：</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span>{</span>
-
-    public <span class="type">Handler</span> mHandler;
-
-    public void run(){
-        <span class="type">Looper</span>.prepare();
-        mHandler=<span class="keyword">new</span> <span class="type">Handler</span>(){
-            public void handleMessage(<span class="type">Message</span> msg){
-                <span class="comment">//process incoming messages here</span>
-            }
-        }
-
-        <span class="type">Looper</span>.loop();
-    }
-}
-</code></pre><p>当我们调用Looper.prepare()方法时，就为当前线程创建了一个Looper对象，该对象由ThreadLocal进行保存。ThreadLocal类保证每个线程都有自己的Looper对象，并且其它线程无法访问。新创建的Looper对象中包含一个MessageQueue，然后通过调用Looper.loop()方法，对该MessageQueue进行轮询操作。</p>
-<p>我们可以参考：HandlerThread和IntentService这两个类，为一个线程加入消息处理机制。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/23/Android-Looper/" data-id="cimrcrly1002l7omfocrkqvu3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-Volley源码分析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/09/23/Volley源码分析/" class="article-date">
@@ -475,7 +421,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 
@@ -495,15 +441,15 @@
           </li>
         
           <li>
-            <a href="/2016/04/08/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
           </li>
         
           <li>
             <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
+          </li>
+        
+          <li>
+            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
           </li>
         
       </ul>

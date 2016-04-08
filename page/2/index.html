@@ -61,6 +61,175 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/09/闭包/" class="article-date">
+  <time datetime="2015-12-09T03:31:00.000Z" itemprop="datePublished">2015-12-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/09/闭包/">闭包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>闭包是指可以包含自由（未绑定到特定对象）变量的代码块；这些变量不是在这个代码块内或者任何全局上下文中定义的，而是在定义代码块的环境中定义。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cimrcrluj00037omfe5c33wbm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Servlet" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/20/Servlet/" class="article-date">
+  <time datetime="2015-11-20T06:52:25.000Z" itemprop="datePublished">2015-11-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/20/Servlet/">Servlet</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java Servlet是运行在Web服务器或应用服务器上的程序，它是作为来自Web浏览器或其他HTTP客户端的请求和服务器上的数据库或应用程序之间的中间层。</p>
+<p>使用Servlet，可以收集来自网页表单的用户输入，呈现来自数据库或者其他源的记录，还可以动态创建网页。</p>
+<p>Java Servlet通常情况下与使用CGI实现的程序可以达到异曲同工的效果。但是相比于CGI，Servlet有以下几点优势：</p>
+<ul>
+<li>性能明显更好</li>
+<li>Servlet在Web服务器的地址空间内执行。这样它就没必要再创建一个单独的进程来处理每个客户端请求。</li>
+<li>Servlet是独立于平台的，因为它们是用Java编写的。</li>
+<li>服务器上的Java安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet是可信的。</li>
+<li>Java类库的全部功能对Servlet来说都是可用的。它可以通过Sockets和RMI（Remote Method Invocation）机制与applets、数据库或其他软件进行交互。</li>
+</ul>
+<p><strong>Servlet生命周期</strong></p>
+<p>Servlet声明周期可被定义为从创建直到销毁的整个过程。以下是Servlet遵循的过程：</p>
+<ol>
+<li>Servlet通过调用init()方法进行初始化。</li>
+<li>Servlet通过调用service()方法来处理客户端的请求。</li>
+<li>Servlet通过调用destory()方法终止。</li>
+<li>最后，Servlet是由JVM的垃圾回收器进行垃圾回收的。</li>
+</ol>
+<p><strong>init() 方法</strong></p>
+<p>init方法被设计成只调用一次。它在第一次创建Servlet时被调用，在后续每次用户请求时不再调用。</p>
+<p>Servlet创建于用户第一次调用对应于该Servlet的URL时，但是也可以指定Servlet在服务器第一次启动时被加载。</p>
+<p>当用户调用一个Servlet时，就会创建一个Servlet实例，每一个用户请求都会产生一个新的线程，适当的时候移交给doGet或doPost方法。init方法简单的创建或加载一些数据，这些数据将被用于Servlet的整个生命周期。</p>
+<p>init() 方法定义如下：</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException</span>{
+    <span class="comment">//初始化代码···</span>
+}
+</code></pre><p><strong>service()方法</strong></p>
+<p>service()方法是执行实际任务的主要方法。Servlet容器（即Web服务器）调用service()方法来处理来自客户端的请求，并把格式化的响应写回给客户端。</p>
+<p>每次服务器接收到一个Servlet请求时，服务器会产生一个新的线程并调用服务。service()方法检查HTTP请求类型（GET、POST、PUT、DELETE等），并在适当的时候调用doGet、doPost、doPut、doDelete等方法。</p>
+<p>service()方法定义如下：</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest request, ServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOExcepion</span>{
+
+}
+</code></pre><p>service()方法由容器调用，service方法在适当的时候调用doGet、doPost、doPut、doDelete等方法。所以，不用对service()方法做任何动作，只需要根据来自客户端的请求类型来重载doGet() 或 doPost() 即可。</p>
+<p><strong>doGet方法</strong></p>
+<p>GET请求来自于一个URL的正常请求，或者来自于一个未指定METHOD的HTML表单，它由doGet()方法处理。</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException</span>{
+    <span class="comment">//Servlet代码</span>
+}
+</code></pre><p><strong>doPost()方法</strong></p>
+<p>POST请求来自于一个特别指定了METHOD为POST的HTML表单，它由doPost()方法处理</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException</span>{
+    <span class="comment">//Servlet代码</span>
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/20/Servlet/" data-id="cimrcrlv4000j7omfftfl1hh1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Servlet/">Servlet</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-CGI" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/20/CGI/" class="article-date">
+  <time datetime="2015-11-20T02:55:29.000Z" itemprop="datePublished">2015-11-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/20/CGI/">CGI</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CGI（Common Gateway Interface，通用网关接口）是外部应用程序（CGI程序）与Web服务器之间的接口标准，是在CGI程序和Web服务器之间传递信息的规程。CGI规范允许Web服务器执行外部程序，并将它们的输出发送给Web浏览器，CGI将Web的一组简单的静态超媒体文档变成一个完整的新的交互式媒体。</p>
+<p>在物理上是一段程序，运行在服务器上，提供同客户端HTML页面的接口。举例来说：假如某个网页上有一个表单，先由用户在客户端输入一些信息，如名字之类的东西。接着用户提交表单内容，浏览器把这些信息传送到服务器的CGI目录下特定的CGI程序中，于是CGI程序在服务器上按照预定的方法进行处理。然后CGI程序给客户端发送一个信息，表示请求的任务已经结束。</p>
+<p>绝大数的CGI程序被用来解释处理来自表单的输入信息，并在服务器产生相应的处理，或将相应的信息反馈给浏览器。CGI程序使网页具有交互功能。</p>
+<p>处理步骤：</p>
+<ol>
+<li>浏览器通过网络把用户请求送到Web服务器</li>
+<li>服务器接收用户请求并交给CGI程序处理</li>
+<li>CGI程序把处理结果传送给web服务器</li>
+<li>服务器把结果送回到用户</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/20/CGI/" data-id="cimrcrlx6001w7omfz6z95izc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CGI/">CGI</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/02/Java泛型学习/" class="article-date">
@@ -111,7 +280,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cik95uvt3000n08pxprswq6tr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/02/Java泛型学习/" data-id="cimrcrlvg000o7omf9xnsw2ik" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-泛型/">Java 泛型</a></li></ul>
@@ -240,7 +409,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cik95uvsm000908px5wpe6ha4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/编程技巧-对象池/" data-id="cimrcrluq00097omff7v10zgc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a></li></ul>
@@ -315,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cik95uvzl001p08px3hgnjs27" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/29/EventBus学习笔记/" data-id="cimrcrlwz001q7omft5aiukgc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-EventBus/">android EventBus</a></li></ul>
@@ -365,7 +534,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cik95uvtm000r08pxyfi31b20" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Future/" data-id="cimrcrlvs000s7omf0j2jgu4v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Future/">Java Future</a></li></ul>
@@ -405,7 +574,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cik95uvz9001c08pxwkuy0ahd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Callable/" data-id="cimrcrlwj001d7omfvzmqk9zf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Callable/">Java Callable</a></li></ul>
@@ -446,7 +615,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="cik95uvyo000x08pxhml1ezsx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-ExecutorService/" data-id="cimrcrlvz000y7omf73f4m190" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a></li></ul>
@@ -543,162 +712,10 @@ executor.<span class="keyword">execute</span>(<span class="keyword">new</span> R
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="cik95uvyr001008pxcl5h2d4s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/20/Java-Executor/" data-id="cimrcrlw300117omfzdg0bumv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Executor/">Java Executor</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-java-线程池" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/20/java-线程池/" class="article-date">
-  <time datetime="2015-10-20T02:14:20.000Z" itemprop="datePublished">2015-10-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/20/java-线程池/">java-线程池</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>线程池可以帮助程序员更好地利用多核cpu。</p>
-<p>好的软件设计不建议手动创建和销毁线程。线程的创建和销毁是非常耗CPU和内存的，因为这需要JVM和操作系统的参与。64位JVM默认线程是大小1MB。这就是为什么说在请求频繁时为每个小的请求创建线程是一种资源的浪费。线程池可以根据创建时选择的策略自动处理线程的生命周期。重点在于：在资源（如内存、CPU）充足的情况下，线程池没有明显的优势，否则没有线程池将导致服务器崩溃。有很多理由可以解释为什么没有更多的资源。例如，在拒绝服务攻击时会引起的许多线程并行执行，从而导致线程饥饿。除此之外，手动执行线程时，可能会因为异常导致线程死亡，程序员必须记得处理这种异常情况。</p>
-<p>ExecutorService是一个非常有用的工具，可以帮助我们很方便的执行所有的任务。它的好处在什么地方呢？我们不需要手动创建工作线程。一个工作线程就是ExecutorService内部使用的线程。值得注意的是，ExecutorService管理线程的生命周期。它可以在负载增加的时候增加工作线程。另一方面，在一定周期内，它可以减少空闲的线程。当我们使用线程池的时候，我们不在需要重复创建线程，我们也不需要担心一个线程执行完任务后的重复使用问题。最后，一个任务提交以后，我们可以获取一个未来结果的抽象-Future。当然，在Java8中，我们可以使用更优秀的CompletableFuture，如何将一个Future转换成CompletableFuture已超出了本文所讨论的范围。但是请记住，只有提交的任务是一个Callable时，Future才有意义，因为Callable有输出结果，而Runnable没有。</p>
-<p>每个线程池由几个模块组成：</p>
-<ul>
-<li>一个任务队列</li>
-<li>一个工作线程的集合</li>
-<li>一个线程工厂</li>
-<li>管理线程状态的元数据</li>
-</ul>
-<p>ExecutorService接口有很多实现，我们重点关注一下最常用的ThreadPoolExecutor。实际上，newCacheThreadPool()、newFixedThreadPool()和newSingleThreadExecutor()三个方法返回的都是ThreadPoolExecutor类的实例。如果要手动创建一个ThreadPoolExecutor类的实例，至少需要5个参数：</p>
-<ul>
-<li>int corePoolSize:线程池保存的线程数量</li>
-<li>int maximumPoolSize:线程的最大数量</li>
-<li>long keepAlive and TimeUnit unit:超出corePoolSize大小后，线程空闲的时间到达给定时间后将会关闭。</li>
-<li>BlockingQueue workQueue:提交的任务将被放置在该队列中等待执行。</li>
-</ul>
-<p>LinkedBlockingQueue是调用Executors类中的方法生成ThreadPoolExecutor实例时默认队列，PriorityBlockingQueue实际上也是一个BlockingQueue，不过，根据设定的优先级来处理任务也是一个棘手的问题。首先，提交一个Runnable或Callable任务，该任务被包装成一个RunnableFuture，然后添加到队列中，PriorityBlockingQueue比较每个对象来觉得执行的优先权（比较对象是包装后的RunnableFuture而不是任务的内容）。不仅如此，当corePoolSize大于1并且工作线程空闲时，ThreadPoolExecutor可能会根据插入顺序来执行，而不是PriorityBlockingQueue所期望的优先级顺序。</p>
-<p>默认情况下，ThreadPoolExecutor的工作队列（workQueue）是没有边界的。通常这是没问题的，但是请记住，没有边界的工作队列可能导致应用出现内存溢出错误。如果要限制任务队列的大小，可以设置RejectionExecutionHandler。你可以自定义处理器或者从4个已有处理器（默认AbortPolicy）中选择一个：</p>
-<ul>
-<li>CallerRunsPolicy</li>
-<li>AbortPolicy</li>
-<li>DiscardPolicy</li>
-<li>DiscardOldestPolicy</li>
-</ul>
-<p>线程工厂通常用于创建自定义的线程。例如，你可以增加自定义的Thread.UncaughExceptionHandler或者设置线程名称。</p>
-<p>JDK5诞生于2004年，提供很多有用的并发工具，ExecutorService类就是其中的一个。线程池通常应用于服务器的底层（如Tomcat和Undertow）。当然，线程池也不仅仅局限于服务器环境。在任何密集并行难题中他们都非常有用。由于现在越来越多的软件运行于多核系统上，线程池就更值得关注了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/20/java-线程池/" data-id="cik95uvsp000c08pxz4yr540w" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-线程池/">java 线程池</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-ByteArrayOutputStream" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/15/Java-ByteArrayOutputStream/" class="article-date">
-  <time datetime="2015-10-15T02:45:45.000Z" itemprop="datePublished">2015-10-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/15/Java-ByteArrayOutputStream/">Java-ByteArrayOutputStream</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>此类实现一个输出流，其中的数据被写入一个byte数据。缓冲区会随着数据的不断写入而自动增长。可使用toByteArray()和toString()获取数据。关闭ByteArrayOutputSream无效。此类中的方法在关闭此流后仍可被调用，而不会产生任何IOException。</p>
-<p>此类的关闭函数定义如下：</p>
-<pre><code> /<span class="keyword">*</span><span class="keyword">*</span>
- <span class="keyword">*</span> Closing a <span class="variable">&lt;tt&gt;</span>ByteArrayOutputStream<span class="variable">&lt;/tt&gt;</span> has no effect. The methods in
- <span class="keyword">*</span> this class can be called after the stream has been closed without
- <span class="keyword">*</span> generating an <span class="variable">&lt;tt&gt;</span>IOException<span class="variable">&lt;/tt&gt;</span>.
- <span class="keyword">*</span>/
-public void close() throws IOException {
-}
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/15/Java-ByteArrayOutputStream/" data-id="cik95uvzc001f08px250nj26t" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java-FilterOutputStream" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/13/Java-FilterOutputStream/" class="article-date">
-  <time datetime="2015-10-13T08:11:13.000Z" itemprop="datePublished">2015-10-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/13/Java-FilterOutputStream/">Java-FilterOutputStream</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>此类是所有过滤输出流类的父类。这些流位于已存在的输出流（基础输出流）之上，他们将已存在的输出流作为其基本数据接收器，但可能直接传输数据或提供一些额外的功能。</p>
-<p>FilterOutputStream类本身只是简单地重写那些将所有请求传递给所包含输出流OUtputStream的所有方法。FilterOutputStream的子类可以进一步的重写这些方法中的一些，并且还可以提供一些额外的方法和字段。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/13/Java-FilterOutputStream/" data-id="cik95uvyk000u08px5b7jcra5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a></li></ul>
 
     </footer>
   </div>
@@ -740,7 +757,7 @@ public void close() throws IOException {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 
@@ -752,23 +769,23 @@ public void close() throws IOException {
       <ul>
         
           <li>
+            <a href="/2016/04/08/Java编程原则/">Java编程原则</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/08/Java Immutable对象/">Java Immutable对象</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
             <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
           </li>
         
           <li>
             <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
           </li>
         
       </ul>

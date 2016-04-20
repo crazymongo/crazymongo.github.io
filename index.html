@@ -61,6 +61,102 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-Activity管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/20/Android-Activity管理/" class="article-date">
+  <time datetime="2016-04-20T11:00:13.000Z" itemprop="datePublished">2016-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/20/Android-Activity管理/">Android_Activity管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们在开发应用的过程中经常会遇到这样一个问题，当我们在页面A时，需要通过A进入页面B，然后在进入页面C等等，在业务处理过程中，允许客户回退到上一个页面，即每一个过程页面暂时都不能关闭。当我们在页面C中处理完业务然后，要求直接回到页面A，且中间涉及的页面也同时被关掉。</p>
+<p>非常常见的一种处理方法就是建立一个Activity的管理类，把业务所经过的页面按顺序放到一个栈中，当需要返回栈底页面时，依次取出栈中页面进行销毁，直到需要恢复的页面。</p>
+<p>其实，我们完全没有必要这样做，因为系统本身就维护了一个类似的Activity回退栈。我们可以通过简单的几步就可以达到效果。</p>
+<p>第一种方式就是把起始Activity的启动模式设置为singleTask，在需要返回到起始页的页面调用startActivity方法就可以了。</p>
+<p>第二种方式就更简单了，通过设置Intent的标记实现，intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/20/Android-Activity管理/" data-id="cin8r00lw002rbomfer5vm1u2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Activity管理/">Activity管理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-launchMode分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/18/Android-launchMode分析/" class="article-date">
+  <time datetime="2016-04-18T10:10:11.000Z" itemprop="datePublished">2016-04-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/18/Android-launchMode分析/">Android_launchMode分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们知道Android的luanchMode有四种，分别是：standard, singleTop, singleTask和singleInstance。下面我们将一次介绍这几种启动模式</p>
+<p>##standard</p>
+<p>Activity默认的启动模式就是standard，每当用户调用startActivity启动这个Activity时，系统都会创建一个新的Activity实例。</p>
+<p>##singleTop</p>
+<p>singleTop其实和standard几乎一样，使用singleTop的Activity也可以创建很多个实例。唯一的区别就是，如果调用的目标Activity已经位于调用者的Task栈顶，则不创建新实例，而是使用当前的这个Activity实例，并调用这个实例的onNewIntent方法。</p>
+<p>##singleTask</p>
+<p>使用singleTask启动模式的Activity在系统中只会存在一个实例。如果这个实例已经存在，intent就好通过onNewIntent传递到这个Activity。否则创建新的Activity实例。</p>
+<p>在同一程序内，如果系统中不存在singleTask Activity的实例，那么就需要创建这个Activity的实例，并将这个实例放入和调用者相同的Task中（可以通过android:taskAffinity属性放入不同的Task中），并位于栈顶。如果Activity的实例已经存在，那么在Activity回退栈中，所有位于该Activity上面的Activity实例都将被销毁掉（销毁过程会调用Activity生命周期函数），这样使得singleTask Activity实例位于栈顶。于此同时，Intent会通过onNewIntent函数传递到这个Activity实例。</p>
+<p>在不同程序之间，如果系统中不存在singleTask Activity的实例，那么将创建一个新的Task，然后要创建Activity的实例，将其放入新的Task中。如果singleTask Activity所在的应用进程存在，但是该Activity实例不存在，那么从别的应用启动这个Activity，新的Activity实例会被创建，并放入到所属进程所在的Task中，并位于栈顶位置。更复杂的一种情况，如果singleTask Activity实例存在，从其他程序被启动，那么这个Activity所在的Task会被移到顶部，并且在这个Task中，位于这个Activity实例之上的所有Activity将会被正常销毁掉。如果我们按返回键，那么我们首先会回退到这个task中的其他Activity，直到当前Task的Activity回退栈为空时，才返回到调用者的task。</p>
+<p>##singleInstance</p>
+<p>这个模式和singleTask差不多，因为他们在系统中都只有一份实例。唯一不同的就是存放singleInstance Activity实例的Task只能存放一个该模式的Activity实例，其它任何的Activity实例都无法进入到这个Task中。注意：从任务管理器中进入应用，按返回键无法回退到上一个task中。</p>
+<p>默认情况下，除了launchMode为singleInstance的Activity被单独放在一个task中，其它启动方式的Activity实例被放到同一个task中。</p>
+<p>由于在不同的任务栈中，导致launchMode为singleInstance的Activity实例的onActivityResult函数调用失败。</p>
+<p>可以通过adb shell dumpsys activity命令查看相关信息</p>
+<p>参考：<a href="http://droidyue.com/blog/2015/08/16/dive-into-android-activity-launchmode/" target="_blank" rel="external">http://droidyue.com/blog/2015/08/16/dive-into-android-activity-launchmode/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/18/Android-launchMode分析/" data-id="cin8r00kv0025bomf0pc1mfa9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-launchMode/">Android launchMode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java编程原则" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/08/Java编程原则/" class="article-date">
@@ -139,7 +235,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/08/Java编程原则/" data-id="cimrcrlvd000n7omf1pzzirrq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/04/08/Java编程原则/" data-id="cin8r00i9000mbomfvyfx035b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -201,7 +297,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/08/Java Immutable对象/" data-id="cimrcrlwq001j7omfxfng7wzv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/04/08/Java Immutable对象/" data-id="cin8r00jq001ibomfm9jb7cyk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -256,7 +352,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/01/13/HashSet和HashMap/" data-id="cimrcrlwx001n7omf5fzbirh1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/01/13/HashSet和HashMap/" data-id="cin8r00jy001mbomfvmrgcsfl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a></li></ul>
@@ -383,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/01/03/Android-UniversalImageLoader-MemoryCache/" data-id="cimrcrlxm00267omfg3sn5pao" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/01/03/Android-UniversalImageLoader-MemoryCache/" data-id="cin8r00ky0028bomfiyeem30m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a></li></ul>
@@ -459,7 +555,7 @@ Settings<span class="class">.System</span><span class="class">.getString</span>(
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="cimrcrlxm002c7omf4h7rv8j1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/25/Android-Settings类初识/" data-id="cin8r00l8002ebomfoiaxp2tn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Settings/">Android Settings</a></li></ul>
@@ -499,7 +595,7 @@ Settings<span class="class">.System</span><span class="class">.getString</span>(
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/22/Android-plugin-for-gradle/" data-id="cimrcrlxi00257omf01i34d8h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/22/Android-plugin-for-gradle/" data-id="cin8r00ks0024bomfi1i0q31x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -554,7 +650,7 @@ Person person=mClass.newInstance();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="cimrcrlx3001t7omfcvk443f5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/15/Class-forName作用/" data-id="cin8r00kd001sbomfom79z8un" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Class/">Java Class</a></li></ul>
@@ -863,129 +959,10 @@ Person person=mClass.newInstance();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="cimrcrlxa001z7omffqy8asyg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/13/Android百分比布局学习/" data-id="cin8r00kk001ybomf28lp5kct" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android屏幕方向切换问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/09/Android屏幕方向切换问题/" class="article-date">
-  <time datetime="2015-12-09T13:04:17.000Z" itemprop="datePublished">2015-12-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在开发过程中，遇到这样一个需求：用户可以在程序中切换横竖屏，并且程序也可以按照用户在系统中设定的旋转方式进行旋转。</p>
-<p>在程序中切换横竖屏的方法如下：</p>
-<pre><code>setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</span>.SCREEN_ORIENTATION_PORTRAIT)</span><span class="comment">;</span>
-setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</span>.SCREEN_ORIENTATION_LANDSCAPE)</span><span class="comment">;</span>
-</code></pre><p>在用户锁定屏幕方向时，上述两个方法足以满足需求；那么问题来了，当用户没有锁定屏幕方向，而是设置成自动旋转，上述两个方法就无法满足需求了，在强制横屏后，程序就无法进行自动旋转了。于是我加了下面的代码以解决该问题：</p>
-<pre><code><span class="keyword">if</span>(Settings.System.getInt(getActivity().getContentResolver(), Settings.System.ACCELEROMETER_ROTATION)==<span class="number">1</span>){
-    <span class="comment">//当屏幕为自动旋转的状态下，强制横竖屏2s后，恢复页面的自动旋转        </span>
-    mHandler.sendEmptyMessageDelayed(<span class="number">1</span>, <span class="number">2</span>*<span class="number">1000</span>);
-}
-
-<span class="keyword">private</span> Handler mHandler=<span class="keyword">new</span> Handler(){
-
-    @<span class="function">Override
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>{
-        <span class="keyword">switch</span>(msg.what){
-        <span class="keyword">case</span> <span class="number">1</span>:
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-            <span class="keyword">break</span>;
-        }
-    }
-};
-</code></pre><p>本以为万事大吉了，可是在使用过程中发现，如果在锁定屏幕方向的情况下，强制切换屏幕方向，然后在设置中打开自动旋转，悲剧，怎么这么多情况。于是想到了监听屏幕旋转设置状态的方法，可是找半天没有找到可用的方法。在浏览网页时，发现有人监听系统亮度改变事件，心中暗喜，哈哈，于是依葫芦画瓢，添加了如下代码：</p>
-<pre><code>getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), <span class="keyword">true</span>, mContentObserver);
-
-<span class="keyword">private</span> ContentObserver mContentObserver=<span class="keyword">new</span> ContentObserver(<span class="keyword">new</span> Handler()) {
-
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onChange</span><span class="params">(<span class="keyword">boolean</span> selfChange)</span> </span>{
-        <span class="comment">// TODO Auto-generated method stub</span>
-        <span class="keyword">super</span>.onChange(selfChange);
-        <span class="keyword">try</span> {
-            <span class="comment">//Control whether the accelerometer will be used to change screen orientation</span>
-            <span class="keyword">if</span>(Settings.System.getInt(getActivity().getContentResolver(), Settings.System.ACCELEROMETER_ROTATION)==<span class="number">1</span>){
-                mHandler.sendEmptyMessageDelayed(<span class="number">1</span>, <span class="number">1000</span>);
-            }
-        } <span class="keyword">catch</span> (Exception e) {
-            <span class="comment">// TODO Auto-generated catch block</span>
-            e.printStackTrace();
-        }
-    }
-};
-</code></pre><p>到此，问题终于解决了，但是也注意到了ContentResolver这个类，我将在另外一篇文章中介绍该类。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/Android屏幕方向切换问题/" data-id="cimrcrlxd00227omfphrw37ig" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-闭包" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/09/闭包/" class="article-date">
-  <time datetime="2015-12-09T03:31:00.000Z" itemprop="datePublished">2015-12-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/09/闭包/">闭包</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>闭包是指可以包含自由（未绑定到特定对象）变量的代码块；这些变量不是在这个代码块内或者任何全局上下文中定义的，而是在定义代码块的环境中定义。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/09/闭包/" data-id="cimrcrluj00037omfe5c33wbm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li></ul>
 
     </footer>
   </div>
@@ -1009,7 +986,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activity管理/">Activity管理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-百分比布局/">Android  百分比布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Handler/">Android Handler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Message/">Android Message</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Messenger/">Android Messenger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Settings/">Android Settings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-UniversalImageLoader-MemoryCache/">Android UniversalImageLoader MemoryCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-launchMode/">Android launchMode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-屏幕切换/">Android 屏幕切换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AndroidStudio-Gradle/">AndroidStudio Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGI/">CGI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HashSet-HashMap-Hashtable/">HashSet HashMap Hashtable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ByteArrayOutputStream/">Java ByteArrayOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Callable/">Java Callable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Class/">Java Class</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Closeable-Flushable/">Java Closeable Flushable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-DataOutput/">Java DataOutput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Executor/">Java Executor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-ExecutorService/">Java ExecutorService</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-FilterOutputStream/">Java FilterOutputStream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Future/">Java Future</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-泛型/">Java 泛型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/">Servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Volley/">Volley</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-EventBus/">android EventBus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classloader/">classloader</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-DataInput/">java DataInput</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-线程池/">java 线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式-负载均衡算法/">分布式 负载均衡算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程技巧-对象池/">编程技巧 对象池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1018,7 +995,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
+      <a href="/tags/Activity管理/" style="font-size: 10px;">Activity管理</a> <a href="/tags/Android-百分比布局/" style="font-size: 10px;">Android  百分比布局</a> <a href="/tags/Android-Handler/" style="font-size: 10px;">Android Handler</a> <a href="/tags/Android-Message/" style="font-size: 10px;">Android Message</a> <a href="/tags/Android-Messenger/" style="font-size: 10px;">Android Messenger</a> <a href="/tags/Android-Settings/" style="font-size: 10px;">Android Settings</a> <a href="/tags/Android-UniversalImageLoader-MemoryCache/" style="font-size: 10px;">Android UniversalImageLoader MemoryCache</a> <a href="/tags/Android-launchMode/" style="font-size: 10px;">Android launchMode</a> <a href="/tags/Android-屏幕切换/" style="font-size: 10px;">Android 屏幕切换</a> <a href="/tags/AndroidStudio-Gradle/" style="font-size: 10px;">AndroidStudio Gradle</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/HashSet-HashMap-Hashtable/" style="font-size: 10px;">HashSet HashMap Hashtable</a> <a href="/tags/Java-ByteArrayOutputStream/" style="font-size: 10px;">Java ByteArrayOutputStream</a> <a href="/tags/Java-Callable/" style="font-size: 10px;">Java Callable</a> <a href="/tags/Java-Class/" style="font-size: 10px;">Java Class</a> <a href="/tags/Java-Closeable-Flushable/" style="font-size: 10px;">Java Closeable Flushable</a> <a href="/tags/Java-DataOutput/" style="font-size: 10px;">Java DataOutput</a> <a href="/tags/Java-Executor/" style="font-size: 10px;">Java Executor</a> <a href="/tags/Java-ExecutorService/" style="font-size: 10px;">Java ExecutorService</a> <a href="/tags/Java-FilterOutputStream/" style="font-size: 10px;">Java FilterOutputStream</a> <a href="/tags/Java-Future/" style="font-size: 10px;">Java Future</a> <a href="/tags/Java-泛型/" style="font-size: 10px;">Java 泛型</a> <a href="/tags/Servlet/" style="font-size: 10px;">Servlet</a> <a href="/tags/Volley/" style="font-size: 10px;">Volley</a> <a href="/tags/android-EventBus/" style="font-size: 10px;">android EventBus</a> <a href="/tags/classloader/" style="font-size: 10px;">classloader</a> <a href="/tags/java-DataInput/" style="font-size: 10px;">java DataInput</a> <a href="/tags/java-线程池/" style="font-size: 10px;">java 线程池</a> <a href="/tags/分布式-负载均衡算法/" style="font-size: 10px;">分布式 负载均衡算法</a> <a href="/tags/编程技巧-对象池/" style="font-size: 10px;">编程技巧 对象池</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a>
     </div>
   </div>
 
@@ -1027,7 +1004,7 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 
@@ -1039,6 +1016,14 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
       <ul>
         
           <li>
+            <a href="/2016/04/20/Android-Activity管理/">Android_Activity管理</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/18/Android-launchMode分析/">Android_launchMode分析</a>
+          </li>
+        
+          <li>
             <a href="/2016/04/08/Java编程原则/">Java编程原则</a>
           </li>
         
@@ -1048,14 +1033,6 @@ setRequestedOrientation<span class="list">(<span class="keyword">ActivityInfo</s
         
           <li>
             <a href="/2016/01/13/HashSet和HashMap/">HashSet、HashMap和Hashtable</a>
-          </li>
-        
-          <li>
-            <a href="/2016/01/03/Android-UniversalImageLoader-MemoryCache/">Android-UniversalImageLoader-MemoryCache</a>
-          </li>
-        
-          <li>
-            <a href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
           </li>
         
       </ul>

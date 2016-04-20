@@ -3,17 +3,30 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015 | crazymongo</title>
+  <title>Android_launchMode分析 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="crazymongo">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+  <meta name="description" content="我们知道Android的luanchMode有四种，分别是：standard, singleTop, singleTask和singleInstance。下面我们将一次介绍这几种启动模式
+##standard
+Activity默认的启动模式就是standard，每当用户调用startActivity启动这个Activity时，系统都会创建一个新的Activity实例。
+##singleTop
+si">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android_launchMode分析">
+<meta property="og:url" content="http://yoursite.com/2016/04/18/Android-launchMode分析/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description">
+<meta property="og:description" content="我们知道Android的luanchMode有四种，分别是：standard, singleTop, singleTask和singleInstance。下面我们将一次介绍这几种启动模式
+##standard
+Activity默认的启动模式就是standard，每当用户调用startActivity启动这个Activity时，系统都会创建一个新的Activity实例。
+##singleTop
+si">
+<meta property="og:updated_time" content="2016-04-18T10:10:12.047Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="crazymongo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android_launchMode分析">
+<meta name="twitter:description" content="我们知道Android的luanchMode有四种，分别是：standard, singleTop, singleTask和singleInstance。下面我们将一次介绍这几种启动模式
+##standard
+Activity默认的启动模式就是standard，每当用户调用startActivity启动这个Activity时，系统都会创建一个新的Activity实例。
+##singleTop
+si">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -59,210 +72,78 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/25/Android-Settings类初识/" class="archive-article-date">
-  <time datetime="2015-12-25T03:57:49.000Z" itemprop="datePublished">Dec 25</time>
+        <section id="main"><article id="post-Android-launchMode分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/18/Android-launchMode分析/" class="article-date">
+  <time datetime="2016-04-18T10:10:11.000Z" itemprop="datePublished">2016-04-18</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+    <h1 class="article-title" itemprop="name">
+      Android_launchMode分析
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/22/Android-plugin-for-gradle/" class="archive-article-date">
-  <time datetime="2015-12-22T09:03:37.000Z" itemprop="datePublished">Dec 22</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
-    </h1>
-  
+        <p>我们知道Android的luanchMode有四种，分别是：standard, singleTop, singleTask和singleInstance。下面我们将一次介绍这几种启动模式</p>
+<p>##standard</p>
+<p>Activity默认的启动模式就是standard，每当用户调用startActivity启动这个Activity时，系统都会创建一个新的Activity实例。</p>
+<p>##singleTop</p>
+<p>singleTop其实和standard几乎一样，使用singleTop的Activity也可以创建很多个实例。唯一的区别就是，如果调用的目标Activity已经位于调用者的Task栈顶，则不创建新实例，而是使用当前的这个Activity实例，并调用这个实例的onNewIntent方法。</p>
+<p>##singleTask</p>
+<p>使用singleTask启动模式的Activity在系统中只会存在一个实例。如果这个实例已经存在，intent就好通过onNewIntent传递到这个Activity。否则创建新的Activity实例。</p>
+<p>在同一程序内，如果系统中不存在singleTask Activity的实例，那么就需要创建这个Activity的实例，并将这个实例放入和调用者相同的Task中（可以通过android:taskAffinity属性放入不同的Task中），并位于栈顶。如果Activity的实例已经存在，那么在Activity回退栈中，所有位于该Activity上面的Activity实例都将被销毁掉（销毁过程会调用Activity生命周期函数），这样使得singleTask Activity实例位于栈顶。于此同时，Intent会通过onNewIntent函数传递到这个Activity实例。</p>
+<p>在不同程序之间，如果系统中不存在singleTask Activity的实例，那么将创建一个新的Task，然后要创建Activity的实例，将其放入新的Task中。如果singleTask Activity所在的应用进程存在，但是该Activity实例不存在，那么从别的应用启动这个Activity，新的Activity实例会被创建，并放入到所属进程所在的Task中，并位于栈顶位置。更复杂的一种情况，如果singleTask Activity实例存在，从其他程序被启动，那么这个Activity所在的Task会被移到顶部，并且在这个Task中，位于这个Activity实例之上的所有Activity将会被正常销毁掉。如果我们按返回键，那么我们首先会回退到这个task中的其他Activity，直到当前Task的Activity回退栈为空时，才返回到调用者的task。</p>
+<p>##singleInstance</p>
+<p>这个模式和singleTask差不多，因为他们在系统中都只有一份实例。唯一不同的就是存放singleInstance Activity实例的Task只能存放一个该模式的Activity实例，其它任何的Activity实例都无法进入到这个Task中。注意：从任务管理器中进入应用，按返回键无法回退到上一个task中。</p>
+<p>默认情况下，除了launchMode为singleInstance的Activity被单独放在一个task中，其它启动方式的Activity实例被放到同一个task中。</p>
+<p>由于在不同的任务栈中，导致launchMode为singleInstance的Activity实例的onActivityResult函数调用失败。</p>
+<p>可以通过adb shell dumpsys activity命令查看相关信息</p>
+<p>参考：<a href="http://droidyue.com/blog/2015/08/16/dive-into-android-activity-launchmode/" target="_blank" rel="external">http://droidyue.com/blog/2015/08/16/dive-into-android-activity-launchmode/</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/15/Class-forName作用/" class="archive-article-date">
-  <time datetime="2015-12-15T08:05:44.000Z" itemprop="datePublished">Dec 15</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/13/Android百分比布局学习/" class="archive-article-date">
-  <time datetime="2015-12-13T11:08:49.000Z" itemprop="datePublished">Dec 13</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/18/Android-launchMode分析/" data-id="cin8r00kv0025bomf0pc1mfa9" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/09/Android屏幕方向切换问题/" class="archive-article-date">
-  <time datetime="2015-12-09T13:04:17.000Z" itemprop="datePublished">Dec 9</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-launchMode/">Android launchMode</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/09/闭包/" class="archive-article-date">
-  <time datetime="2015-12-09T03:31:00.000Z" itemprop="datePublished">Dec 9</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/09/闭包/">闭包</a>
-    </h1>
+    <a href="/2016/04/20/Android-Activity管理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android_Activity管理
+        
+      </div>
+    </a>
   
+  
+    <a href="/2016/04/08/Java编程原则/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java编程原则</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/20/Servlet/" class="archive-article-date">
-  <time datetime="2015-11-20T06:52:25.000Z" itemprop="datePublished">Nov 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/20/Servlet/">Servlet</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/20/CGI/" class="archive-article-date">
-  <time datetime="2015-11-20T02:55:29.000Z" itemprop="datePublished">Nov 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/20/CGI/">CGI</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/02/Java泛型学习/" class="archive-article-date">
-  <time datetime="2015-11-02T02:34:13.000Z" itemprop="datePublished">Nov 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/29/编程技巧-对象池/" class="archive-article-date">
-  <time datetime="2015-10-29T06:14:49.000Z" itemprop="datePublished">Oct 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/29/编程技巧-对象池/">编程技巧-对象池</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 </section>
         
           <aside id="sidebar">

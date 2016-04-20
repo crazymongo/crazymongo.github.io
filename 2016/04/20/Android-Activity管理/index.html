@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015 | crazymongo</title>
+  <title>Android_Activity管理 | crazymongo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="crazymongo">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+  <meta name="description" content="我们在开发应用的过程中经常会遇到这样一个问题，当我们在页面A时，需要通过A进入页面B，然后在进入页面C等等，在业务处理过程中，允许客户回退到上一个页面，即每一个过程页面暂时都不能关闭。当我们在页面C中处理完业务然后，要求直接回到页面A，且中间涉及的页面也同时被关掉。
+非常常见的一种处理方法就是建立一个Activity的管理类，把业务所经过的页面按顺序放到一个栈中，当需要返回栈底页面时，依次取出栈中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android_Activity管理">
+<meta property="og:url" content="http://yoursite.com/2016/04/20/Android-Activity管理/index.html">
 <meta property="og:site_name" content="crazymongo">
-<meta property="og:description">
+<meta property="og:description" content="我们在开发应用的过程中经常会遇到这样一个问题，当我们在页面A时，需要通过A进入页面B，然后在进入页面C等等，在业务处理过程中，允许客户回退到上一个页面，即每一个过程页面暂时都不能关闭。当我们在页面C中处理完业务然后，要求直接回到页面A，且中间涉及的页面也同时被关掉。
+非常常见的一种处理方法就是建立一个Activity的管理类，把业务所经过的页面按顺序放到一个栈中，当需要返回栈底页面时，依次取出栈中">
+<meta property="og:updated_time" content="2016-04-20T11:00:13.214Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="crazymongo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android_Activity管理">
+<meta name="twitter:description" content="我们在开发应用的过程中经常会遇到这样一个问题，当我们在页面A时，需要通过A进入页面B，然后在进入页面C等等，在业务处理过程中，允许客户回退到上一个页面，即每一个过程页面暂时都不能关闭。当我们在页面C中处理完业务然后，要求直接回到页面A，且中间涉及的页面也同时被关掉。
+非常常见的一种处理方法就是建立一个Activity的管理类，把业务所经过的页面按顺序放到一个栈中，当需要返回栈底页面时，依次取出栈中">
   
     <link rel="alternative" href="/atom.xml" title="crazymongo" type="application/atom+xml">
   
@@ -59,210 +63,59 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/25/Android-Settings类初识/" class="archive-article-date">
-  <time datetime="2015-12-25T03:57:49.000Z" itemprop="datePublished">Dec 25</time>
+        <section id="main"><article id="post-Android-Activity管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/20/Android-Activity管理/" class="article-date">
+  <time datetime="2016-04-20T11:00:13.000Z" itemprop="datePublished">2016-04-20</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/25/Android-Settings类初识/">Android-Settings类初识</a>
+    <h1 class="article-title" itemprop="name">
+      Android_Activity管理
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/22/Android-plugin-for-gradle/" class="archive-article-date">
-  <time datetime="2015-12-22T09:03:37.000Z" itemprop="datePublished">Dec 22</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/22/Android-plugin-for-gradle/">Android_plugin_for_gradle</a>
-    </h1>
-  
+        <p>我们在开发应用的过程中经常会遇到这样一个问题，当我们在页面A时，需要通过A进入页面B，然后在进入页面C等等，在业务处理过程中，允许客户回退到上一个页面，即每一个过程页面暂时都不能关闭。当我们在页面C中处理完业务然后，要求直接回到页面A，且中间涉及的页面也同时被关掉。</p>
+<p>非常常见的一种处理方法就是建立一个Activity的管理类，把业务所经过的页面按顺序放到一个栈中，当需要返回栈底页面时，依次取出栈中页面进行销毁，直到需要恢复的页面。</p>
+<p>其实，我们完全没有必要这样做，因为系统本身就维护了一个类似的Activity回退栈。我们可以通过简单的几步就可以达到效果。</p>
+<p>第一种方式就是把起始Activity的启动模式设置为singleTask，在需要返回到起始页的页面调用startActivity方法就可以了。</p>
+<p>第二种方式就更简单了，通过设置Intent的标记实现，intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/15/Class-forName作用/" class="archive-article-date">
-  <time datetime="2015-12-15T08:05:44.000Z" itemprop="datePublished">Dec 15</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/15/Class-forName作用/">Class.forName作用</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/13/Android百分比布局学习/" class="archive-article-date">
-  <time datetime="2015-12-13T11:08:49.000Z" itemprop="datePublished">Dec 13</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/20/Android-Activity管理/" data-id="cin8r00lw002rbomfer5vm1u2" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/13/Android百分比布局学习/">Android百分比布局学习</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/09/Android屏幕方向切换问题/" class="archive-article-date">
-  <time datetime="2015-12-09T13:04:17.000Z" itemprop="datePublished">Dec 9</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/09/Android屏幕方向切换问题/">Android屏幕方向切换问题</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Activity管理/">Activity管理</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/12/09/闭包/" class="archive-article-date">
-  <time datetime="2015-12-09T03:31:00.000Z" itemprop="datePublished">Dec 9</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/09/闭包/">闭包</a>
-    </h1>
   
+    <a href="/2016/04/18/Android-launchMode分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android_launchMode分析</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/20/Servlet/" class="archive-article-date">
-  <time datetime="2015-11-20T06:52:25.000Z" itemprop="datePublished">Nov 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/20/Servlet/">Servlet</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/20/CGI/" class="archive-article-date">
-  <time datetime="2015-11-20T02:55:29.000Z" itemprop="datePublished">Nov 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/20/CGI/">CGI</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/02/Java泛型学习/" class="archive-article-date">
-  <time datetime="2015-11-02T02:34:13.000Z" itemprop="datePublished">Nov 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/02/Java泛型学习/">Java泛型学习</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/29/编程技巧-对象池/" class="archive-article-date">
-  <time datetime="2015-10-29T06:14:49.000Z" itemprop="datePublished">Oct 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/29/编程技巧-对象池/">编程技巧-对象池</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 </section>
         
           <aside id="sidebar">
